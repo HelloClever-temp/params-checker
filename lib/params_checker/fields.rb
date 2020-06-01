@@ -111,6 +111,16 @@ module ParamsChecker
       }
     end
 
+    def boolean_field(required: true, default: nil)
+      raise "This field's type must be boolean." if [required].any? { |value| !value.in? [true, false] }
+    
+      {
+          type: 'boolean',
+          default: default,
+          required: required
+      }
+    end
+
   end
   
 end

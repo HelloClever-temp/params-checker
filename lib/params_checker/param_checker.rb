@@ -225,6 +225,21 @@ module ParamsChecker
       
         end
 
+        class BooleanChecker < BaseParamChecker
+          prepend SimpleCommand
+      
+          def call
+              check_type && opts[key]
+          end
+      
+          def check_type
+              valid = opts[key].in? [true, false]
+              add_error("This field's type must be boolean.") unless valid
+              valid
+          end
+      
+        end
+
     end
 end
 
