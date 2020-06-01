@@ -18,7 +18,7 @@ $ bundle
 
 Or install it yourself as:
 ```bash
-$ gem install params_checker
+$ gem 'params_checker', git: 'git@gitlab.com:rexylab/params-checker.git', branch: 'development'
 ```
 
 ## Contributing

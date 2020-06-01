@@ -130,6 +130,8 @@ module ParamsChecker
           ParamChecker::TimeParamChecker.call key, fields, params
       when 'datetime'
           ParamChecker::DateTimeParamChecker.call key, fields, params
+      when 'email'
+          ParamChecker::EmailParamChecker.call key, fields, params
       end
     end
 

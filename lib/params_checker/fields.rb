@@ -92,11 +92,20 @@ module ParamsChecker
     end
     
     def datetime_field(required: true, default: nil)
-      p required
       raise "This field's type must be boolean." if [required].any? { |value| !value.in? [true, false] }
     
       {
           type: 'datetime',
+          default: default,
+          required: required
+      }
+    end
+
+    def email_field(required: true, default: nil)
+      raise "This field's type must be boolean." if [required].any? { |value| !value.in? [true, false] }
+    
+      {
+          type: 'email',
           default: default,
           required: required
       }

@@ -204,6 +204,27 @@ module ParamsChecker
             end
         end
 
+        class EmailParamChecker < BaseParamChecker
+          prepend SimpleCommand
+      
+          def call
+              check_type && check_regrex && opts[key]
+          end
+      
+          def check_type
+              valid = opts[key].is_a? String
+              add_error("Invalid email.") unless valid
+              valid
+          end
+      
+          def check_regrex
+              valid = opts[key].match(URI::MailTo::EMAIL_REGEXP)
+              add_error('Invalid email.') unless valid
+              valid
+          end
+      
+        end
+
     end
 end
 
