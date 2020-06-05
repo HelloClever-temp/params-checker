@@ -32,7 +32,7 @@ module ParamsChecker
       }
     end
     
-    def big_int_field(required: true, default: nil, min: -2_000_000_000_000, max: 2_000_000_000_000)
+    def bigint_field(required: true, default: nil, min: -2_000_000_000_000, max: 2_000_000_000_000)
       raise "This field's type must be integer." if [min, max].any? { |value| !value.is_a?(Integer) }
       raise "This field's type must be boolean." if [required].any? { |value| !value.in? [true, false] }
       raise 'Invalid integer value.' unless (min >= -2_000_000_000_000) && (max <= 2_000_000_000_000)

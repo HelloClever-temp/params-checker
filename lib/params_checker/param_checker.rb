@@ -28,6 +28,7 @@ module ParamsChecker
         
             def check_type
                 add_error("This field's type must be integer.") unless opts[key].is_a? Integer
+                true
             end
         
             def check_param
@@ -46,23 +47,20 @@ module ParamsChecker
             end
         
             def check_type
-                valid = opts[key].is_a? String
-                add_error("This field's type must be string.") unless valid
-                valid
+                add_error("This field's type must be string.") unless opts[key].is_a? String
+                true
             end
         
             def check_allow_blank
-                valid = !(!fields[key][:allow_blank] && opts[key].blank?)
-                add_error('This field cannot be blank.') unless valid
-                valid
+                add_error('This field cannot be blank.') unless !(!fields[key][:allow_blank] && opts[key].blank?)
+                true
             end
         
             def check_length
                 min_length = fields[key][:min_length]
                 max_length = fields[key][:max_length]
-                valid = (min_length..max_length).include? opts[key].length
-                add_error("This string field's length must be in range from #{min_length} to #{max_length}.") unless valid
-                valid
+                add_error("This string field's length must be in range from #{min_length} to #{max_length}.") unless (min_length..max_length).include? opts[key].length
+                true
             end
         end
         
@@ -74,15 +72,13 @@ module ParamsChecker
             end
         
             def check_type
-                valid = opts[key].is_a? Array
-                add_error("This field's type must be array.") unless valid
-                valid
+                add_error("This field's type must be array.") unless opts[key].is_a? Array
+                true
             end
         
             def check_allow_empty
-                valid = !(!fields[key][:allow_empty] && opts[key].empty?)
-                add_error('This field cannot be empty.') unless valid
-                valid
+                add_error('This field cannot be empty.') unless !(!fields[key][:allow_empty] && opts[key].empty?)
+                true
             end
         end
 
@@ -109,9 +105,8 @@ module ParamsChecker
             end
 
             def check_type
-                valid = opts[key].is_a? ActionController::Parameters
-                add_error("This field's type must be object.") unless valid
-                valid
+                add_error("This field's type must be object.") unless opts[key].is_a? ActionController::Parameters
+                true
             end
 
             def add_error(message = '')
@@ -150,9 +145,8 @@ module ParamsChecker
             end
 
             def check_type
-                valid = opts[key].is_a? Array
-                add_error("This field's type must be array.") unless valid
-                valid
+                add_error("This field's type must be array.") unless opts[key].is_a? Array
+                true
             end
         
             def add_error(message = '')
@@ -212,15 +206,13 @@ module ParamsChecker
           end
       
           def check_type
-              valid = opts[key].is_a? String
-              add_error("Invalid email.") unless valid
-              valid
+              add_error("Invalid email.") unless opts[key].is_a? String
+              true
           end
       
           def check_regrex
-              valid = opts[key].match(URI::MailTo::EMAIL_REGEXP)
-              add_error('Invalid email.') unless valid
-              valid
+              add_error('Invalid email.') unless opts[key].match(URI::MailTo::EMAIL_REGEXP)
+              true
           end
       
         end
@@ -233,9 +225,8 @@ module ParamsChecker
           end
       
           def check_type
-              valid = opts[key].in? [true, false]
-              add_error("This field's type must be boolean.") unless valid
-              valid
+              add_error("This field's type must be boolean.") unless opts[key].in? [true, false]
+              true
           end
       
         end
