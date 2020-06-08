@@ -112,7 +112,7 @@ module ParamsChecker
 
     def check_base_on_field_type key
       case fields[key][:type]
-      when 'int'
+      when 'num'
           ParamChecker::IntParamChecker.call key, fields, params
       when 'char'
           ParamChecker::CharParamChecker.call key, fields, params

@@ -27,14 +27,14 @@ module ParamsChecker
             end
         
             def check_type
-                add_error("This field's type must be integer.") unless opts[key].is_a? Integer
+                add_error("This field's type must be numeric.") unless opts[key].is_a? Numeric
                 true
             end
         
             def check_param
                 min = fields[key][:min]
                 max = fields[key][:max]
-                add_error("This integer field's value must be in range from #{min} to #{max}.") unless (
+                add_error("This numeric field's value must be in range from #{min} to #{max}.") unless (
                     min..max).include? opts[key]
             end
         end
