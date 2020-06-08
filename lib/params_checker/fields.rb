@@ -3,7 +3,7 @@
 module ParamsChecker
   module Fields
     def text_field(required: true, default: nil, allow_blank: false, min_length: 0, max_length: 10_000)
-      raise "This field's type must be numeric." if [min_length, max_length].any? { |value| !value.is_a?(Numeric) }
+      raise "This field's type must be integer." if [min_length, max_length].any? { |value| !value.is_a?(Integer) }
       raise "This field's type must be boolean." if [required, allow_blank].any? { |value| !value.in? [true, false] }
       raise 'Invalid text length.' unless (min_length >= 0) && (max_length <= 10_000)
     
@@ -18,7 +18,7 @@ module ParamsChecker
     end
     
     def char_field(required: true, default: nil, allow_blank: false, min_length: 0, max_length: 255)
-      raise "This field's type must be numeric." if [min_length, max_length].any? { |value| !value.is_a?(Numeric) }
+      raise "This field's type must be integer." if [min_length, max_length].any? { |value| !value.is_a?(Integer) }
       raise "This field's type must be boolean." if [required, allow_blank].any? { |value| !value.in? [true, false] }
       raise 'Invalid char length.' unless (min_length >= 0) && (max_length <= 255)
     
@@ -53,6 +53,92 @@ module ParamsChecker
     
       {
           type: 'num',
+          default: default,
+          required: required,
+          min: min,
+          max: max
+      }
+    end
+
+    def bigint_field(required: true, default: nil, min: -2_000_000_000_000, max: 2_000_000_000_000)
+      raise "This field's type must be integer." if [min, max].any? { |value| !value.is_a?(Integer) }
+      raise "This field's type must be boolean." if [required].any? { |value| !value.in? [true, false] }
+      raise 'Invalid integer value.' unless (min >= -2_000_000_000_000) && (max <= 2_000_000_000_000)
+    
+      {
+          type: 'int',
+          default: default,
+          required: required,
+          min: min,
+          max: max
+      }
+    end
+    
+    def int_field(required: true, default: nil, min: -2_000_000_000, max: 2_000_000_000)
+      raise "This field's type must be integer." if [min, max].any? { |value| !value.is_a?(Integer) }
+      raise "This field's type must be boolean." if [required].any? { |value| !value.in? [true, false] }
+      raise 'Invalid integer value.' unless (min >= -2_000_000_000) && (max <= 2_000_000_000)
+    
+      {
+          type: 'int',
+          default: default,
+          required: required,
+          min: min,
+          max: max
+      }
+    end
+
+    # asdasda
+
+    def positive_bignum_field(required: true, default: nil, min: 0, max: 2_000_000_000_000)
+      raise "This field's type must be numeric." if [min, max].any? { |value| !value.is_a?(Numeric) }
+      raise "This field's type must be boolean." if [required].any? { |value| !value.in? [true, false] }
+      raise 'Invalid numeric value.' unless (min >= 0) && (max <= 2_000_000_000_000)
+    
+      {
+          type: 'num',
+          default: default,
+          required: required,
+          min: min,
+          max: max
+      }
+    end
+    
+    def positive_num_field(required: true, default: nil, min: 0, max: 2_000_000_000)
+      raise "This field's type must be numeric." if [min, max].any? { |value| !value.is_a?(Numeric) }
+      raise "This field's type must be boolean." if [required].any? { |value| !value.in? [true, false] }
+      raise 'Invalid numeric value.' unless (min >= 0) && (max <= 2_000_000_000)
+    
+      {
+          type: 'num',
+          default: default,
+          required: required,
+          min: min,
+          max: max
+      }
+    end
+
+    def positive_bigint_field(required: true, default: nil, min: 0, max: 2_000_000_000_000)
+      raise "This field's type must be integer." if [min, max].any? { |value| !value.is_a?(Integer) }
+      raise "This field's type must be boolean." if [required].any? { |value| !value.in? [true, false] }
+      raise 'Invalid integer value.' unless (min >= 0) && (max <= 2_000_000_000_000)
+    
+      {
+          type: 'int',
+          default: default,
+          required: required,
+          min: min,
+          max: max
+      }
+    end
+    
+    def positive_int_field(required: true, default: nil, min: 0, max: 2_000_000_000)
+      raise "This field's type must be integer." if [min, max].any? { |value| !value.is_a?(Integer) }
+      raise "This field's type must be boolean." if [required].any? { |value| !value.in? [true, false] }
+      raise 'Invalid integer value.' unless (min >= 0) && (max <= 2_000_000_000)
+    
+      {
+          type: 'int',
           default: default,
           required: required,
           min: min,

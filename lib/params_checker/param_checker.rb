@@ -18,7 +18,7 @@ module ParamsChecker
             attr_accessor :key, :fields, :opts
         end
         
-        class IntParamChecker < BaseParamChecker
+        class NumParamChecker < BaseParamChecker
             prepend SimpleCommand
         
             def call
@@ -38,6 +38,27 @@ module ParamsChecker
                     min..max).include? opts[key]
             end
         end
+
+        class IntParamChecker < BaseParamChecker
+          prepend SimpleCommand
+      
+          def call
+              check_type && check_param
+              opts[key]
+          end
+      
+          def check_type
+              add_error("This field's type must be integer.") unless opts[key].is_a? Integer
+              true
+          end
+      
+          def check_param
+              min = fields[key][:min]
+              max = fields[key][:max]
+              add_error("This integer field's value must be in range from #{min} to #{max}.") unless (
+                  min..max).include? opts[key]
+          end
+      end
         
         class CharParamChecker < BaseParamChecker
             prepend SimpleCommand
