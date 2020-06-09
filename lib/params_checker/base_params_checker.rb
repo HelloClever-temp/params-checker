@@ -23,7 +23,7 @@ module ParamsChecker
       }
     end
 
-    def raise_error message="Invalid data"
+    def raise_error message="controlled"
       raise MyError.new(message)
     end
 
@@ -185,7 +185,7 @@ module ParamsChecker
           errors.delete(key)
       end
       errors.add(:errors, {
-          message: 'Invalid data.',
+          message: 'controlled',
           details: details
       })
     end
