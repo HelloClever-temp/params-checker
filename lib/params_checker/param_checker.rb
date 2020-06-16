@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module ParamsChecker
     module ParamChecker
         class BaseParamChecker
@@ -27,15 +25,17 @@ module ParamsChecker
             end
         
             def check_type
-                add_error("This field's type must be numeric.") unless opts[key].is_a? Numeric
-                true
+                valid = opts[key].is_a? Numeric
+                add_error("This field's type must be numeric.") unless valid
+                valid
             end
         
             def check_param
                 min = fields[key][:min]
                 max = fields[key][:max]
-                add_error("This numeric field's value must be in range from #{min} to #{max}.") unless (
-                    min..max).include? opts[key]
+                valid =(min..max).include? opts[key]
+                add_error("This numeric field's value must be in range from #{min} to #{max}.") unless valid
+                valid
             end
         end
 
@@ -48,15 +48,17 @@ module ParamsChecker
           end
       
           def check_type
-              add_error("This field's type must be integer.") unless opts[key].is_a? Integer
-              true
+              valid = opts[key].is_a? Integer
+              add_error("This field's type must be integer.") unless valid
+              valid
           end
       
           def check_param
               min = fields[key][:min]
               max = fields[key][:max]
-              add_error("This integer field's value must be in range from #{min} to #{max}.") unless (
-                  min..max).include? opts[key]
+              valid = (min..max).include? opts[key]
+              add_error("This integer field's value must be in range from #{min} to #{max}.") unless valid
+              valid
           end
       end
         
@@ -68,20 +70,23 @@ module ParamsChecker
             end
         
             def check_type
-                add_error("This field's type must be string.") unless opts[key].is_a? String
-                true
+                valid = opts[key].is_a? String
+                add_error("This field's type must be string.") unless valid
+                valid
             end
         
             def check_allow_blank
-                add_error('This field cannot be blank.') unless !(!fields[key][:allow_blank] && opts[key].blank?)
-                true
+                valid = !(!fields[key][:allow_blank] && opts[key].blank?)
+                add_error('This field cannot be blank.') unless valid
+                valid
             end
         
             def check_length
                 min_length = fields[key][:min_length]
                 max_length = fields[key][:max_length]
-                add_error("This string field's length must be in range from #{min_length} to #{max_length}.") unless (min_length..max_length).include? opts[key].length
-                true
+                valid = (min_length..max_length).include? opts[key].length
+                add_error("This string field's length must be in range from #{min_length} to #{max_length}.") unless valid
+                valid
             end
         end
         
@@ -93,13 +98,15 @@ module ParamsChecker
             end
         
             def check_type
-                add_error("This field's type must be array.") unless opts[key].is_a? Array
-                true
+                valid =opts[key].is_a? Array
+                add_error("This field's type must be array.") unless valid
+                valid
             end
         
             def check_allow_empty
-                add_error('This field cannot be empty.') unless !(!fields[key][:allow_empty] && opts[key].empty?)
-                true
+                valid =!(!fields[key][:allow_empty] && opts[key].empty?)
+                add_error('This field cannot be empty.') unless valid
+                valid
             end
         end
 
@@ -126,8 +133,9 @@ module ParamsChecker
             end
 
             def check_type
-                add_error("This field's type must be object.") unless opts[key].is_a? ActionController::Parameters
-                true
+                valid =opts[key].is_a? ActionController::Parameters
+                add_error("This field's type must be object.") unless valid
+                valid
             end
 
             def add_error(message = '')
@@ -166,8 +174,9 @@ module ParamsChecker
             end
 
             def check_type
-                add_error("This field's type must be array.") unless opts[key].is_a? Array
-                true
+                valid = opts[key].is_a? Array
+                add_error("This field's type must be array.") unless valid
+                valid
             end
         
             def add_error(message = '')
@@ -227,13 +236,15 @@ module ParamsChecker
           end
       
           def check_type
-              add_error("Invalid email.") unless opts[key].is_a? String
-              true
+              valid = opts[key].is_a? String
+              add_error("Invalid email.") unless valid
+              valid
           end
       
           def check_regrex
-              add_error('Invalid email.') unless opts[key].match(URI::MailTo::EMAIL_REGEXP)
-              true
+              valid = opts[key].match(URI::MailTo::EMAIL_REGEXP)
+              add_error('Invalid email.') unless valid
+              valid
           end
       
         end
@@ -246,8 +257,9 @@ module ParamsChecker
           end
       
           def check_type
-              add_error("This field's type must be boolean.") unless opts[key].in? [true, false]
-              true
+              valid = opts[key].in? [true, false]
+              add_error("This field's type must be boolean.") unless valid
+              valid
           end
       
         end
