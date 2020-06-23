@@ -74,7 +74,7 @@ module ParamsChecker
     def default_check
       all_fields_are_valid = true
       fields.each do |key, value|
-              all_fields_are_valid = false unless data_valid? key
+          all_fields_are_valid = false unless data_valid? key
       end
       all_fields_are_valid
     end

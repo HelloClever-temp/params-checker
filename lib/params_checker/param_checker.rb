@@ -159,8 +159,8 @@ module ParamsChecker
             end
 
             def formatted_nested_hashs
-                opts[key].each_with_index do |nested_hash, index|
-                    opts[key][index] = formatted_nested_hash nested_hash
+                opts[key].map do |nested_hash|
+                  formatted_nested_hash(nested_hash)
                 end
             end
 
