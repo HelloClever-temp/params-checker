@@ -178,10 +178,7 @@ module ParamsChecker
 
     def specify_field_check key
       check_method = "check_#{key}"
-      p 'params[key]: ' , @formatted_params_after_default_check[key]
       value = self.send check_method, @formatted_params_after_default_check[key]
-      p 'key: ' , key
-      p 'value: ' , value
       @formatted_params_after_custom_specify_field_checks.delete(key)
       @formatted_params_after_custom_specify_field_checks[key] = value
     end
