@@ -23,7 +23,7 @@ module ParamsChecker
       }
     end
 
-    def raise_error message="controlled"
+    def raise_error message="Invalid data"
       raise MyError.new(message)
     end
 
@@ -32,7 +32,32 @@ module ParamsChecker
       error_exist? && add_error
       formatted_params
     rescue => e
-      if e.class.name == 'ParamsChecker::MyError'
+      # only add errors at the first hash, else raise error for the first hash to catch
+      # example:
+      # old:
+      # {
+      #   "errors": {
+      #     "message": "Invalid data",
+      #     "details": {
+      #       "purchase_order_items": [
+      #         {
+      #           "errors": {
+      #             "message": "Material not exists.",
+      #             "details": {}
+      #           }
+      #         }
+      #       ]
+      #     }
+      #   }
+      # }
+      # new: 
+      # {
+      #   "errors": {
+      #     "message": "Material not exists.",
+      #     "details": {}
+      #   }
+      # }
+      if e.class.name == 'ParamsChecker::MyError' && is_outest_hash
           errors.add(:errors, {
               message: e,
               details: {}
@@ -185,7 +210,7 @@ module ParamsChecker
           errors.delete(key)
       end
       errors.add(:errors, {
-          message: 'controlled',
+          message: 'Invalid data',
           details: details
       })
     end
