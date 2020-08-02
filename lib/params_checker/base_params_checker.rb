@@ -172,13 +172,16 @@ module ParamsChecker
       @formatted_params_after_custom_specify_field_checks = formatted_params_after_default_check
       fields.each do |key, value|
         next unless self.methods.grep(/check_#{key}/).length > 0
-        specify_field_check key
+        specify_field_check(key)
       end
     end
 
-    def specify_field_check key
+    def specify_field_check(key)
       check_method = "check_#{key}"
-      value = self.send check_method, @formatted_params_after_default_check[key]
+      total_parameters = method(check_method).arity
+      # check_id(id) or check_id(id, opts)
+      value = total_parameters == 1 ? self.send(check_method, @formatted_params_after_default_check[key])
+                                    : self.send(check_method, @formatted_params_after_default_check[key], @formatted_params_after_default_check)
       @formatted_params_after_custom_specify_field_checks.delete(key)
       @formatted_params_after_custom_specify_field_checks[key] = value
     end
