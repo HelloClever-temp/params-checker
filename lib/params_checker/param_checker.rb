@@ -20,6 +20,8 @@ module ParamsChecker
             prepend SimpleCommand
         
             def call
+                return nil if fields[key][:allow_nil] && opts[key].nil?
+
                 check_type && check_param
                 opts[key]
             end
@@ -43,6 +45,8 @@ module ParamsChecker
           prepend SimpleCommand
       
           def call
+                return nil if fields[key][:allow_nil] && opts[key].nil?
+
               check_type && check_param
               opts[key]
           end
@@ -60,17 +64,19 @@ module ParamsChecker
               add_error("This integer field's value must be in range from #{min} to #{max}.") unless valid
               valid
           end
-      end
+        end
         
         class CharParamChecker < BaseParamChecker
             prepend SimpleCommand
         
             def call
+                return nil if fields[key][:allow_nil] && opts[key].nil?
+
                 check_type && check_allow_blank && check_length && opts[key]
             end
         
             def check_type
-                valid = opts[key].is_a? String
+                valid = opts[key].is_a?(String)
                 add_error("This field's type must be string.") unless valid
                 valid
             end
@@ -94,6 +100,8 @@ module ParamsChecker
             prepend SimpleCommand
         
             def call
+                return nil if fields[key][:allow_nil] && opts[key].nil?
+
                 check_type && check_allow_empty && opts[key]
             end
         
@@ -120,6 +128,8 @@ module ParamsChecker
             end
         
             def call
+                return nil if fields[key][:allow_nil] && opts[key].nil?
+
                 check_type && formatted_nested_hash
             end
 
@@ -155,6 +165,8 @@ module ParamsChecker
             end
         
             def call
+                return nil if fields[key][:allow_nil] && opts[key].nil?
+
                 check_type && formatted_nested_hashs
             end
 
@@ -190,6 +202,8 @@ module ParamsChecker
             prepend SimpleCommand
         
             def call
+                return nil if fields[key][:allow_nil] && opts[key].nil?
+
                 formatted_date
             end
         
@@ -204,6 +218,8 @@ module ParamsChecker
             prepend SimpleCommand
         
             def call
+                return nil if fields[key][:allow_nil] && opts[key].nil?
+
                 formatted_time
             end
         
@@ -218,6 +234,8 @@ module ParamsChecker
             prepend SimpleCommand
         
             def call
+                return nil if fields[key][:allow_nil] && opts[key].nil?
+
                 formatted_datetime
             end
         
@@ -232,6 +250,8 @@ module ParamsChecker
           prepend SimpleCommand
       
           def call
+                return nil if fields[key][:allow_nil] && opts[key].nil?
+
               check_type && check_regrex && opts[key]
           end
       
@@ -253,6 +273,8 @@ module ParamsChecker
           prepend SimpleCommand
       
           def call
+                return nil if fields[key][:allow_nil] && opts[key].nil?
+
               check_type && opts[key]
           end
       
