@@ -171,7 +171,9 @@ module ParamsChecker
     def specify_field_checks
       @formatted_params_after_custom_specify_field_checks = formatted_params_after_default_check
       fields.each do |key, value|
-        next unless self.methods.grep(/check_#{key}/).length > 0
+        # next unless self.methods.grep(/check_#{key}/).length > 0
+        next unless "check_#{key}".to_sym.in?(self.methods)
+        
         specify_field_check(key)
       end
     end
