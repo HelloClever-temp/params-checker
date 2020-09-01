@@ -72,7 +72,9 @@ module ParamsChecker
     end
 
     def default_check
-      params.is_a?(ActionController::Parameters) && all_fields_are_valid
+      params_is_a_hash = params.is_a?(ActionController::Parameters)
+      errors.add(:error, "ParamsChecker only receive object as input.") unless params_is_a_hash
+      params_is_a_hash && all_fields_are_valid
     end
 
     def all_fields_are_valid

@@ -143,7 +143,7 @@ module ParamsChecker
             end
 
             def check_type
-                valid =opts[key].is_a?(ActionController::Parameters)
+                valid = opts[key].is_a?(ActionController::Parameters) 
                 add_error("This field's type must be object.") unless valid
                 valid
             end
