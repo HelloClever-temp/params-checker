@@ -143,7 +143,7 @@ module ParamsChecker
             end
 
             def check_type
-                valid =opts[key].is_a? ActionController::Parameters
+                valid =opts[key].is_a?(ActionController::Parameters)
                 add_error("This field's type must be object.") unless valid
                 valid
             end
@@ -177,7 +177,7 @@ module ParamsChecker
             end
 
             def formatted_nested_hash nested_hash
-                cmd = fields[key][:class].call(params:nested_hash, context: context, is_outest_hash: false)
+                cmd = fields[key][:class].call(params: nested_hash, context: context, is_outest_hash: false)
                 if cmd.success?
                     cmd.result
                 else
@@ -186,7 +186,7 @@ module ParamsChecker
             end
 
             def check_type
-                valid = opts[key].is_a? Array
+                valid = opts[key].is_a?(Array)
                 add_error("This field's type must be array.") unless valid
                 valid
             end
