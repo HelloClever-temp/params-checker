@@ -72,17 +72,15 @@ module ParamsChecker
     end
 
     def default_check
-      p "========>params : ", params
-      p("========>params.is_a?(ActionController::Parameters) : ", params.is_a?(ActionController::Parameters) )
       params.is_a?(ActionController::Parameters) && all_fields_are_valid
     end
 
     def all_fields_are_valid
       return @all_fields_are_valid if @all_fields_are_valid.present?
 
-      all_fields_are_valid = true
+      @all_fields_are_valid = true
       fields.each do |key, value|
-          all_fields_are_valid = false unless data_valid? key
+          @all_fields_are_valid = false unless data_valid? key
       end
       @all_fields_are_valid
     end
