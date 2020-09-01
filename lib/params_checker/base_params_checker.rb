@@ -72,7 +72,9 @@ module ParamsChecker
     end
 
     def default_check
-      init.is_a?(Hash) && all_fields_are_valid
+      p "========>params : ", params
+      p("========>params.is_a?(ActionController::Parameters) : ", params.is_a?(ActionController::Parameters) )
+      params.is_a?(ActionController::Parameters) && all_fields_are_valid
     end
 
     def all_fields_are_valid
