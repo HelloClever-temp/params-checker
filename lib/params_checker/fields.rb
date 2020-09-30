@@ -2,10 +2,10 @@
 
 module ParamsChecker
   module Fields
-    def text_field(required: true, default: nil, allow_blank: false, min_length: 0, max_length: 10_000, allow_nil: false)
+    def text_field(required: true, default: nil, allow_blank: false, min_length: 0, max_length: 50_000, allow_nil: false)
       raise "This field's type must be integer." if [min_length, max_length].any? { |value| !value.is_a?(Integer) }
       raise "This field's type must be boolean." if [required, allow_blank, allow_nil].any? { |value| !value.in? [true, false] }
-      raise 'Invalid text length.' unless (min_length >= 0) && (max_length <= 10_000)
+      raise 'Invalid text length.' unless (min_length >= 0) && (max_length <= 50_000)
     
       {
           type: 'char',
