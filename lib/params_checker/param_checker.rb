@@ -279,7 +279,7 @@ module ParamsChecker
           end
       
           def check_type
-              valid = opts[key].in? [true, false]
+              valid = opts[key].in? [true, false, "true", "false", "1", "0"]
               add_error("This field's type must be boolean.") unless valid
               valid
           end
