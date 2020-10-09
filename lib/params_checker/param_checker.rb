@@ -286,6 +286,23 @@ module ParamsChecker
       
         end
 
+        class FileChecker < BaseParamChecker
+          prepend SimpleCommand
+      
+          def call
+                return nil if fields[key][:allow_nil] && opts[key].nil?
+
+              check_type && opts[key]
+          end
+      
+          def check_type
+              valid = opts[key].is_a?(ActionDispatch::Http::UploadedFile)
+              add_error("This field's type must be file.") unless valid
+              valid
+          end
+      
+        end
+
     end
 end
 

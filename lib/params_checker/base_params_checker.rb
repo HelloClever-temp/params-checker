@@ -169,6 +169,8 @@ module ParamsChecker
           ParamChecker::EmailParamChecker.call key, fields, params
       when 'boolean'
           ParamChecker::BooleanChecker.call key, fields, params
+      when 'file'
+          ParamChecker::FileChecker.call key, fields, params
       end
     end
 
