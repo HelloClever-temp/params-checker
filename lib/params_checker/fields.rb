@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ParamsChecker
   module Fields
     def text_field(

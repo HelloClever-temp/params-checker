@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ParamsChecker
   class BaseParamsChecker
     include Fields
@@ -57,14 +59,17 @@ module ParamsChecker
       #     "details": {}
       #   }
       # }
-      if e.class.name == 'ParamsChecker::MyError' && is_outest_hash
-        errors.add(:errors, {
-          message: e,
-          details: {}
-        })
-      else
+      if e.class.name != 'ParamsChecker::MyError' || !is_outest_hash
         raise e
       end
+
+      errors.add(
+        :errors,
+        {
+          message: e,
+          details: {}
+        }
+      )
     end
 
     def error_exist?
@@ -74,9 +79,7 @@ module ParamsChecker
     def default_check
       params_is_a_hash = params.is_a?(ActionController::Parameters) || params.is_a?(Hash)
 
-      unless params_is_a_hash
-        errors.add(:error, 'ParamsChecker only receive object or ActionController::Parameters as input.')
-      end
+      !params_is_a_hash && errors.add(:error, 'ParamsChecker only receive object or ActionController::Parameters as input.')
 
       params_is_a_hash && all_fields_are_valid
     end
@@ -118,7 +121,8 @@ module ParamsChecker
 
     def value_need_to_be_present?(key)
       if fields[key].key?(:default) && !fields[key][:default].nil?
-        @params[key] = fields[key][:default]
+        @params[key].nil? && @params[key] = fields[key][:default]
+
         true
       else
         fields[key][:required]
