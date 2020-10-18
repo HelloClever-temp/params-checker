@@ -11,19 +11,19 @@ module ParamsChecker
       @formatted_params_after_custom_all_fields_check = {}
     end
 
-    def self.init required: true, many: false 
+    def self.init(required: true, many: false)
       raise "This field's type must be boolean." if [required, many].any? { |value| !value.in? [true, false] }
 
       type = many ? 'nested_hashs' : 'nested_hash'
       {
-          type: type,
-          required: required,
-          many: many,
-          class: self
+        type: type,
+        required: required,
+        many: many,
+        class: self
       }
     end
 
-    def raise_error message="Invalid data"
+    def raise_error(message = 'Invalid data')
       raise MyError.new(message)
     end
 
@@ -58,12 +58,12 @@ module ParamsChecker
       #   }
       # }
       if e.class.name == 'ParamsChecker::MyError' && is_outest_hash
-          errors.add(:errors, {
-              message: e,
-              details: {}
-          })
+        errors.add(:errors, {
+          message: e,
+          details: {}
+        })
       else
-          raise e
+        raise e
       end
     end
 
@@ -73,7 +73,11 @@ module ParamsChecker
 
     def default_check
       params_is_a_hash = params.is_a?(ActionController::Parameters) || params.is_a?(Hash)
-      errors.add(:error, "ParamsChecker only receive object or ActionController::Parameters as input.") unless params_is_a_hash
+
+      unless params_is_a_hash
+        errors.add(:error, 'ParamsChecker only receive object or ActionController::Parameters as input.')
+      end
+
       params_is_a_hash && all_fields_are_valid
     end
 
@@ -82,18 +86,18 @@ module ParamsChecker
 
       @all_fields_are_valid = true
       fields.each do |key, value|
-          @all_fields_are_valid = false unless data_valid? key
+        @all_fields_are_valid = false unless data_valid? key
       end
       @all_fields_are_valid
     end
 
-    def data_valid? key
+    def data_valid?(key)
       if value_need_to_be_present?(key)
         if value_present?(key)
-          if value_valid?(key) 
-              true
+          if value_valid?(key)
+            true
           else
-              false
+            false
           end
         else
           errors.add(key, 'This field is required.')
@@ -101,18 +105,18 @@ module ParamsChecker
         end
       else
         if value_present?(key)
-          if value_valid?(key) 
-              true
-          else    
-              false
+          if value_valid?(key)
+            true
+          else
+            false
           end
         else
-            true
+          true
         end
       end
     end
 
-    def value_need_to_be_present? key
+    def value_need_to_be_present?(key)
       if fields[key].key?(:default) && !fields[key][:default].nil?
         @params[key] = fields[key][:default]
         true
@@ -128,9 +132,9 @@ module ParamsChecker
     def value_valid? key
       cmd = check_base_on_field_type key
       if cmd.success?
-          @formatted_params_after_default_check[key] = cmd.result
+        @formatted_params_after_default_check[key] = cmd.result
       else
-          errors.add(key, cmd.errors[key])
+        errors.add(key, cmd.errors[key])
       end
       cmd.success?
     end
@@ -138,39 +142,39 @@ module ParamsChecker
     def fields
       field_params = {}
       init.each do |key, field|
-          field_params[key] = field
+        field_params[key] = field
       end
       @fields ||= field_params
     end
 
-    def check_base_on_field_type key
+    def check_base_on_field_type(key)
       case fields[key][:type]
       when 'num'
-          ParamChecker::NumParamChecker.call key, fields, params
-      when 'int'  
-          ParamChecker::IntParamChecker.call key, fields, params
+        ParamChecker::NumParamChecker.call(key, fields, params)
+      when 'int'
+        ParamChecker::IntParamChecker.call(key, fields, params)
       when 'char'
-          ParamChecker::CharParamChecker.call key, fields, params
+        ParamChecker::CharParamChecker.call(key, fields, params)
       when 'text'
-          ParamChecker::CharParamChecker.call key, fields, params
+        ParamChecker::CharParamChecker.call(key, fields, params)
       when 'arr'
-          ParamChecker::ArrParamChecker.call key, fields, params
+        ParamChecker::ArrParamChecker.call(key, fields, params)
       when 'nested_hash'
-          ParamChecker::NestedHashChecker.call key, fields, params, context
+        ParamChecker::NestedHashChecker.call(key, fields, params, context)
       when 'nested_hashs'
-          ParamChecker::NestedHashsChecker.call key, fields, params, context
+        ParamChecker::NestedHashsChecker.call(key, fields, params, context)
       when 'date'
-          ParamChecker::DateParamChecker.call key, fields, params
+        ParamChecker::DateParamChecker.call(key, fields, params)
       when 'time'
-          ParamChecker::TimeParamChecker.call key, fields, params
+        ParamChecker::TimeParamChecker.call(key, fields, params)
       when 'datetime'
-          ParamChecker::DateTimeParamChecker.call key, fields, params
+        ParamChecker::DateTimeParamChecker.call(key, fields, params)
       when 'email'
-          ParamChecker::EmailParamChecker.call key, fields, params
+        ParamChecker::EmailParamChecker.call(key, fields, params)
       when 'boolean'
-          ParamChecker::BooleanChecker.call key, fields, params
+        ParamChecker::BooleanChecker.call(key, fields, params)
       when 'file'
-          ParamChecker::FileChecker.call key, fields, params
+        ParamChecker::FileChecker.call(key, fields, params)
       end
     end
 
@@ -182,8 +186,8 @@ module ParamsChecker
       @formatted_params_after_custom_specify_field_checks = formatted_params_after_default_check
       fields.each do |key, value|
         # next unless self.methods.grep(/check_#{key}/).length > 0
-        next unless "check_#{key}".to_sym.in?(self.methods)
-        
+        next unless "check_#{key}".to_sym.in?(methods)
+
         specify_field_check(key)
       end
     end
@@ -191,9 +195,14 @@ module ParamsChecker
     def specify_field_check(key)
       check_method = "check_#{key}"
       total_parameters = method(check_method).arity
+
       # check_id(id) or check_id(id, opts)
-      value = total_parameters == 1 ? self.send(check_method, @formatted_params_after_default_check[key])
-                                    : self.send(check_method, @formatted_params_after_default_check[key], @formatted_params_after_default_check)
+      value = if total_parameters == 1
+                send(check_method, @formatted_params_after_default_check[key])
+              else
+                send(check_method, @formatted_params_after_default_check[key], @formatted_params_after_default_check)
+              end
+
       @formatted_params_after_custom_specify_field_checks.delete(key)
       @formatted_params_after_custom_specify_field_checks[key] = value
     end
@@ -214,35 +223,40 @@ module ParamsChecker
       formatted_params_after_custom_all_fields_check
     end
 
-    def add_error()
+    def add_error
       # only add errors skeleton at the outest hash
       return unless is_outest_hash
 
       details = {}
+
       errors.each do |key, value|
-          details[key] = value
-          errors.delete(key)
+        details[key] = value
+        errors.delete(key)
       end
-      errors.add(:errors, {
+
+      errors.add(
+        :errors,
+        {
           message: 'Invalid data',
           details: details
-      })
+        }
+      )
     end
 
-    attr_accessor :params, :context,
-      :formatted_params_after_default_check,
-        :formatted_params_after_custom_specify_field_checks,
-        :formatted_params_after_custom_all_fields_check,
-        :is_outest_hash
+    attr_accessor :params,
+                  :context,
+                  :formatted_params_after_default_check,
+                  :formatted_params_after_custom_specify_field_checks,
+                  :formatted_params_after_custom_all_fields_check,
+                  :is_outest_hash
   end
 end
 
-
-# return true if value_need_to_be_present?(key) && value_present?(key) && value_valid?(key) 
-# return false if value_need_to_be_present?(key) && value_present?(key) && !value_valid?(key) 
-# return false if value_need_to_be_present?(key) && !value_present?(key) && value_valid?(key) 
-# return false if value_need_to_be_present?(key) && !value_present?(key) && !value_valid?(key) 
-# return true if !value_need_to_be_present?(key) && value_present?(key) && value_valid?(key) 
-# return false if !value_need_to_be_present?(key) && value_present?(key) && !value_valid?(key) 
-# return true if !value_need_to_be_present?(key) && !value_present?(key) && value_valid?(key) 
-# return true if !value_need_to_be_present?(key) && !value_present?(key) && !value_valid?(key) 
+# return true if value_need_to_be_present?(key) && value_present?(key) && value_valid?(key)
+# return false if value_need_to_be_present?(key) && value_present?(key) && !value_valid?(key)
+# return false if value_need_to_be_present?(key) && !value_present?(key) && value_valid?(key)
+# return false if value_need_to_be_present?(key) && !value_present?(key) && !value_valid?(key)
+# return true if !value_need_to_be_present?(key) && value_present?(key) && value_valid?(key)
+# return false if !value_need_to_be_present?(key) && value_present?(key) && !value_valid?(key)
+# return true if !value_need_to_be_present?(key) && !value_present?(key) && value_valid?(key)
+# return true if !value_need_to_be_present?(key) && !value_present?(key) && !value_valid?(key)
