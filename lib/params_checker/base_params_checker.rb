@@ -114,7 +114,8 @@ module ParamsChecker
 
     def value_need_to_be_present? key
       if fields[key].key?(:default) && !fields[key][:default].nil?
-        @params[key] = fields[key][:default]
+        @params[key].nil? && @params[key] = fields[key][:default]
+
         true
       else
         fields[key][:required]
