@@ -228,10 +228,10 @@ module ParamsChecker
                       if value.is_a?(String)
                         value
                       else
-                        # TODO: add field index: number to nested_hashs for frontend to know, when to map,
+                        # TODO: add field index: number to nested_hashs for frontend to know
                         # TODO: example: 3 hash, only the middle is error
                         # TODO: => [{name: this field is required}]
-                        # TODO: the front end can not map
+                        # TODO: the front end can not map data
                         # TODO: => change to like this: [{index: 1, name: this field is required}]
                         value.map { |err| err[:errors][0][:field_errors] }
                       end
