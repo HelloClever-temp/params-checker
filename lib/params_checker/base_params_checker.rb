@@ -29,8 +29,8 @@ module ParamsChecker
     def raise_error(message = 'Fields are not valid')
       raise GeneralError.new(message)
     end
-
     def add_error(message)
+      # TODO: add second parameter to add_error(:code, 'invalid code')
       raise FieldError.new(message)
     end
 
@@ -50,6 +50,7 @@ module ParamsChecker
       errors.add(
         :errors,
         {
+          # TODO: add error type (general_error, front_end_errors, client_errors)
           message: e
         }
       )
@@ -219,15 +220,19 @@ module ParamsChecker
     def add_errors
       # only add errors at the outest hash
       # return unless is_outest_hash
-
-      p "========>errors : ", errors
       field_errors = errors.each_with_object({}) do |error, hash|
         key, value = error
-
+        # TODO: change to: if value is a string => return value, else check nested hashs or nested hash
         hash[key] = if schema[key][:type] == 'nested_hashs'
+
                       if value.is_a?(String)
                         value
                       else
+                        # TODO: add field index: number to nested_hashs for frontend to know, when to map,
+                        # TODO: example: 3 hash, only the middle is error
+                        # TODO: => [{name: this field is required}]
+                        # TODO: the front end can not map
+                        # TODO: => change to like this: [{index: 1, name: this field is required}]
                         value.map { |err| err[:errors][0][:field_errors] }
                       end
                     elsif schema[key][:type] == 'nested_hash'
