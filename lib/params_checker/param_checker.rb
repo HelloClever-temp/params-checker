@@ -137,17 +137,20 @@ module ParamsChecker
 
       def formatted_nested_hash
         cmd = schema[key][:class].call(params: params[key], context: context, is_outest_hash: false)
-        if cmd.success?
-          cmd.result
-        else
-          add_field_error(cmd.errors)
-        end
+        return cmd.result if cmd.success?
+
+        add_nested_hash_error(cmd.errors)
       end
 
       def check_type
         valid = params[key].is_a?(ActionController::Parameters) || params[key].is_a?(Hash)
         add_field_error("This field's type must be object or ActionController::Parameters.") unless valid
+
         valid
+      end
+
+      def add_nested_hash_error(message = '')
+        errors.add(key, message[0][:errors][0][:field_errors])
       end
 
       def add_field_error(message = '')
@@ -173,24 +176,30 @@ module ParamsChecker
       end
 
       def formatted_nested_hashs
-        params[key].map do |nested_hash|
-          formatted_nested_hash(nested_hash)
+        params[key].map.with_index do |nested_hash, index|
+          formatted_nested_hash(nested_hash, index)
         end
       end
 
-      def formatted_nested_hash(nested_hash)
-        cmd = schema[key][:class].call(params: nested_hash, context: context, is_outest_hash: false)
-        if cmd.success?
-          cmd.result
-        else
-          add_field_error(cmd.errors)
-        end
+      def formatted_nested_hash(nested_hash, index)
+        cmd = schema[key][:class].call(
+          params: nested_hash,
+          context: context,
+          is_outest_hash: false
+        )
+        return cmd.result if cmd.success?
+
+        add_nested_hash_error(cmd.errors, index)
       end
 
       def check_type
         valid = params[key].is_a?(Array)
         add_field_error("This field's type must be array.") unless valid
         valid
+      end
+
+      def add_nested_hash_error(message = '', index)
+        errors.add(key, message[:errors][0][:field_errors].merge(index: index))
       end
 
       def add_field_error(message = '')

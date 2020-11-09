@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+DEFAULT_MESSAGE_ERROR = 'Fields are not valid'
+ERROR_TYPES = %w[general_error field_errors]
+
 module ParamsChecker
   class BaseParamsChecker
     include Fields
@@ -18,6 +21,7 @@ module ParamsChecker
       raise "This field's type must be boolean." if [required, many].any? { |value| !value.in? [true, false] }
 
       type = many ? 'nested_hashs' : 'nested_hash'
+
       {
         type: type,
         required: required,
@@ -26,9 +30,10 @@ module ParamsChecker
       }
     end
 
-    def raise_error(message = 'Fields are not valid')
+    def raise_error(message = DEFAULT_MESSAGE_ERROR)
       raise GeneralError.new(message)
     end
+
     def add_error(message)
       # TODO: add second parameter to add_error(:code, 'invalid code')
       raise FieldError.new(message)
@@ -51,7 +56,8 @@ module ParamsChecker
         :errors,
         {
           # TODO: add error type (general_error, front_end_errors, client_errors)
-          message: e
+          message: e,
+          error_type: 'general_error'
         }
       )
     end
@@ -222,31 +228,11 @@ module ParamsChecker
       # return unless is_outest_hash
       field_errors = errors.each_with_object({}) do |error, hash|
         key, value = error
-        # TODO: change to: if value is a string => return value, else check nested hashs or nested hash
-        hash[key] = if schema[key][:type] == 'nested_hashs'
-
-                      if value.is_a?(String)
-                        value
-                      else
-                        # TODO: add field index: number to nested_hashs for frontend to know
-                        # TODO: example: 3 hash, only the middle is error
-                        # TODO: => [{name: this field is required}]
-                        # TODO: the front end can not map data
-                        # TODO: => change to like this: [{index: 1, name: this field is required}]
-                        value.map { |err| err[:errors][0][:field_errors] }
-                      end
-                    elsif schema[key][:type] == 'nested_hash'
-                      # return value if value.is_a?(String)
-
-                      value[0][:errors][0][:field_errors]
-                    else
-                      value
-                    end
+        hash[key] = value
 
         errors.delete(key)
       end
 
-      p "========>field_errors : ", field_errors
       @custom_check_errors.each do |key, value|
         field_errors[key] = value
       end
@@ -254,8 +240,9 @@ module ParamsChecker
       errors.add(
         :errors,
         {
-          message: 'Fields are not valid',
-          field_errors: field_errors
+          message: DEFAULT_MESSAGE_ERROR,
+          error_type: 'fields_errors',
+          field_errors: field_errors,
         }
       )
     end
