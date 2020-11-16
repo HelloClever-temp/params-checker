@@ -215,7 +215,8 @@ module ParamsChecker
     def arr_field(
       required: true,
       default: nil,
-      allow_empty: false, allow_nil: false
+      allow_empty: false,
+      allow_nil: false
     )
       Helper.check_type(type: 'boolean', values: [required, allow_empty, allow_nil])
 
@@ -224,6 +225,21 @@ module ParamsChecker
         default: default,
         required: required,
         allow_empty: allow_empty,
+        allow_nil: allow_nil
+      }
+    end
+
+    def hash_field(
+      required: true,
+      default: nil,
+      allow_nil: false
+    )
+      Helper.check_type(type: 'boolean', values: [required, allow_nil])
+
+      {
+        type: 'hash',
+        default: default,
+        required: required,
         allow_nil: allow_nil
       }
     end

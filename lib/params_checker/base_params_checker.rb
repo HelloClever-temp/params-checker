@@ -2,7 +2,6 @@
 
 DEFAULT_MESSAGE_ERROR = 'Fields are not valid'
 ERROR_TYPES = %w[general_error field_errors]
-
 module ParamsChecker
   class BaseParamsChecker
     include Fields
@@ -55,7 +54,6 @@ module ParamsChecker
       errors.add(
         :errors,
         {
-          # TODO: add error type (general_error, front_end_errors, client_errors)
           message: e,
           error_type: 'general_error'
         }
@@ -158,6 +156,8 @@ module ParamsChecker
         ParamChecker::CharParamChecker.call(key, schema, params)
       when 'arr'
         ParamChecker::ArrParamChecker.call(key, schema, params)
+      when 'hash'
+        ParamChecker::HashParamChecker.call(key, schema, params)
       when 'nested_hash'
         ParamChecker::NestedHashChecker.call(key, schema, params, context)
       when 'nested_hashs'

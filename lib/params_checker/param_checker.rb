@@ -120,6 +120,22 @@ module ParamsChecker
       end
     end
 
+    class HashParamChecker < BaseParamChecker
+      prepend SimpleCommand
+
+      def call
+        return nil if schema[key][:allow_nil] && params[key].nil?
+
+        check_type && params[key]
+      end
+
+      def check_type
+        valid = params[key].is_a? Hash
+        add_field_error("This field's type must be hash.") unless valid
+        valid
+      end
+    end
+
     class NestedHashChecker
       prepend SimpleCommand
       def initialize(key = '', schema = {}, params = {}, context = {})
