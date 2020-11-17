@@ -1,0 +1,7 @@
+Layout/LineLength:
+  Max: 130
+  IgnoredPatterns: ["#"]
+Metrics/MethodLength:
+  Max: 25
+Metrics/ParameterLists:
+  Max: 8

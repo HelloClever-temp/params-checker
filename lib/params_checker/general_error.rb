@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module ParamsChecker
-  class MyError < StandardError
+  class GeneralError < StandardError
     def initialize(message)
-        super(message)
+      super(message)
     end
   end
 end
