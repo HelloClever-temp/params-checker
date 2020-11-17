@@ -44,6 +44,8 @@ module ParamsChecker
       error_exist? && add_errors
       formatted_params
     rescue ParamsChecker::GeneralError => e
+      p "========>GeneralError : ", e
+
       # if is the outest hash, add error
       # if is not, keep raising error, bubble up to the outest hash,
       # then the outest hash will add error
@@ -204,6 +206,8 @@ module ParamsChecker
 
       @formatted_params_after_custom_fields_check[key] = value
     rescue ParamsChecker::FieldError => e
+      p "========>@custom_check_errors : ", @custom_check_errors
+      p "========>e : ", e
       @custom_check_errors[key] = e
     end
 
