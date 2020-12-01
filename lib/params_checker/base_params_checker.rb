@@ -206,8 +206,6 @@ module ParamsChecker
 
       @formatted_params_after_custom_fields_check[key] = value
     rescue ParamsChecker::FieldError => e
-      p "========>@custom_check_errors : ", @custom_check_errors
-      p "========>e : ", e
       @custom_check_errors[key] = e
     end
 
@@ -230,8 +228,10 @@ module ParamsChecker
     def add_errors
       # only add errors at the outest hash
       # return unless is_outest_hash
+
       field_errors = errors.each_with_object({}) do |error, hash|
         key, value = error
+        value = value.is_a?(Array) ? value[0] : value
         hash[key] = value
 
         errors.delete(key)
