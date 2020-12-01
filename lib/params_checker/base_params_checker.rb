@@ -39,8 +39,7 @@ module ParamsChecker
     end
 
     def call
-      default_fields_check
-      custom_check
+      default_fields_check && custom_check
       error_exist? && add_errors
       formatted_params
     rescue ParamsChecker::GeneralError => e
