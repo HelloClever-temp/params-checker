@@ -13,3 +13,11 @@ gemspec
 
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
+group :development, :test do
+  # gem 'rspec'
+  gem 'rspec-rails'
+  gem 'simple_command'
+  gem 'pry'
+  # gem 'zeus'
+  gem 'rudash'
+end

@@ -155,7 +155,8 @@ module ParamsChecker
     def positive_num_field(
       required: true,
       default: nil,
-      min: 0, max: 2_000_000_000, 
+      min: 0,
+      max: 2_000_000_000, 
       allow_nil: false
     )
       Helper.check_type(type: 'numberic', values: [min, max])
@@ -175,7 +176,8 @@ module ParamsChecker
     def positive_bigint_field(
       required: true,
       default: nil,
-      min: 0, max: 2_000_000_000_000,
+      min: 0,
+      max: 2_000_000_000_000,
       allow_nil: false
     )
       Helper.check_type(type: 'integer', values: [min, max])
@@ -195,7 +197,8 @@ module ParamsChecker
     def positive_int_field(
       required: true,
       default: nil,
-      min: 0, max: 2_000_000_000,
+      min: 0,
+      max: 2_000_000_000,
       allow_nil: false
     )
       Helper.check_type(type: 'integer', values: [min, max])
