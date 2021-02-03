@@ -9,7 +9,7 @@ module TextField
   class InvalidMaxLengthValueValidator < ParamsChecker::BaseParamsChecker
     def init
       {
-        char: text_field(max_length: 300001)
+        name: text_field(max_length: 300001)
       }
     end
   end
@@ -17,7 +17,7 @@ module TextField
   class ValidMaxLengthValueValidator < ParamsChecker::BaseParamsChecker
     def init
       {
-        char: text_field(max_length: 3000)
+        name: text_field(max_length: 3000)
       }
     end
   end

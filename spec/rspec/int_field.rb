@@ -1,29 +1,27 @@
 require 'rails_helper'
-require 'validators/char_field'
-require 'validators/text_field'
+require 'validators/int_field'
 require 'shared_contexts/base'
 require 'helper/base'
-require 'helper/char_field'
+require 'helper/int_field'
 
 # TODO:
 # - more tests about default value param
 
 # rubocop:disable Metricts/BlockLength
-RSpec.describe 'char_field', type: :helper do
+RSpec.describe 'int_field', type: :helper do
   include_context 'required_error_message'
-  include_context 'allow_blank_error_message'
   include_context 'integer_argument_error_message'
   include_context 'numberic_argument_error_message'
   include_context 'boolean_argument_error_message'
 
-  let(:allow_nil_error_message) { "This field's type must be string." }
-  let(:char_length_error_message) { 'Invalid char length.' }
+  let(:allow_nil_error_message) { "This field's type must be integer." }
+  let(:int_length_error_message) { 'Invalid integer value.' }
 
   describe 'check param_checker arguments' do
     describe 'check type' do
-      describe 'check min_length' do
+      describe 'check min' do
         context 'type is not integer' do
-          let(:validator) { CharField::InvalidMinLengthTypeValidator }
+          let(:validator) { IntField::InvalidMinTypeValidator }
 
           it 'should RAISE ERROR' do
             expect_raise(validator)
@@ -32,9 +30,9 @@ RSpec.describe 'char_field', type: :helper do
         end
       end
 
-      describe 'check max_length' do
+      describe 'check max' do
         context 'type is not integer' do
-          let(:validator) { CharField::InvalidMaxLengthTypeValidator }
+          let(:validator) { IntField::InvalidMaxTypeValidator }
 
           it 'should RAISE ERROR' do
             expect_raise(validator)
@@ -45,18 +43,7 @@ RSpec.describe 'char_field', type: :helper do
 
       describe 'check required' do
         context 'type is not boolean' do
-          let(:validator) { CharField::InvalidRequiredTypeValidator }
-
-          it 'should RAISE ERROR' do
-            expect_raise(validator)
-            expect_raise_message(validator, boolean_argument_error_message)
-          end
-        end
-      end
-
-      describe 'check allow_blank' do
-        context 'type is not boolean' do
-          let(:validator) { CharField::InvalidAllowBlankTypeValidator }
+          let(:validator) { IntField::InvalidRequiredTypeValidator }
 
           it 'should RAISE ERROR' do
             expect_raise(validator)
@@ -67,7 +54,7 @@ RSpec.describe 'char_field', type: :helper do
 
       describe 'check allow_nil' do
         context 'type is not boolean' do
-          let(:validator) { CharField::InvalidAllowNilTypeValidator }
+          let(:validator) { IntField::InvalidAllowNilTypeValidator }
 
           it 'should RAISE ERROR' do
             expect_raise(validator)
@@ -78,33 +65,24 @@ RSpec.describe 'char_field', type: :helper do
     end
 
     describe 'check value' do
-      describe 'check min_length' do
+      describe 'check min' do
         context 'value is invalid' do
-          let(:validator) { CharField::InvalidMinLengthValueValidator }
+          let(:validator) { IntField::InvalidMinValueValidator }
 
           it 'should RAISE ERROR' do
             expect_raise(validator)
-            expect_raise_message(validator, char_length_error_message)
+            expect_raise_message(validator, int_length_error_message)
           end
         end
       end
 
-      describe 'check max_length' do
-        context 'value is invalid (256)' do
-          let(:validator) { CharField::InvalidMaxLengthValueValidator1 }
+      describe 'check max' do
+        context 'value is invalid' do
+          let(:validator) { IntField::InvalidMaxValueValidator }
 
           it 'should RAISE ERROR' do
             expect_raise(validator)
-            expect_raise_message(validator, char_length_error_message)
-          end
-        end
-
-        context 'value is invalid (3000)' do
-          let(:validator) { CharField::InvalidMaxLengthValueValidator2 }
-
-          it 'should RAISE ERROR' do
-            expect_raise(validator)
-            expect_raise_message(validator, char_length_error_message)
+            expect_raise_message(validator, int_length_error_message)
           end
         end
       end
@@ -112,7 +90,7 @@ RSpec.describe 'char_field', type: :helper do
   end
 
   describe 'check default param_checker' do
-    let(:validator) { CharField::DefaultValidator }
+    let(:validator) { IntField::DefaultValidator }
 
     describe 'check default required parameter' do
       context 'field is absent' do
@@ -122,18 +100,6 @@ RSpec.describe 'char_field', type: :helper do
 
           expect_fail(cmd)
           expect_eq(get_field_error(cmd), required_error_message)
-        end
-      end
-    end
-
-    describe 'check default allow_blank parameter' do
-      context 'field is blank' do
-        it 'should BE PREVENTED' do
-          params = { name: '' }
-          cmd = validator.call(params: params)
-
-          expect_fail(cmd)
-          expect_eq(get_field_error(cmd), allow_blank_error_message)
         end
       end
     end
@@ -150,19 +116,15 @@ RSpec.describe 'char_field', type: :helper do
     end
 
     describe 'check default max_value parameter' do
-      context 'field is too long' do
+      context 'field is too big' do
         it 'should BE PREVENTED' do
           params = {
-            name: '70jqfYkkZsXVagVLUAJMQjTMLC6BJAPzryxjSX1CXri
-              IyvIN8iWZjfQ5UYsheouXnTTvmKaVbSmvFOo5naA5QWKeLtR02ngX8VFGqs
-              9mouekJqqqICfYJJcSizvDsNfCHNMA26eomvrfry1gLsxCkQ6PagKOrJ266
-              BhAutIT6bfeNUE6ywA9gMyz6keUkumB1AYJy7i1BgAarHydqMvNOKKIoCVm
-              V5Jg5qw9LVyfgUjeAEivzAdvwSdMKXQ0TGjx'
+            age: 2_000_000_001
           }
           cmd = validator.call(params: params)
 
           expect_fail(cmd)
-          expect_eq(get_field_error(cmd), get_max_length_error_message)
+          expect_eq(get_field_error(cmd), get_max_value_error_message)
         end
       end
     end
@@ -170,7 +132,7 @@ RSpec.describe 'char_field', type: :helper do
     describe 'check default allow_nil parameter' do
       context 'field is nil' do
         it 'should BE PREVENTED' do
-          params = { name: nil }
+          params = { age: nil }
           cmd = validator.call(params: params)
 
           expect_fail(cmd)
@@ -181,7 +143,7 @@ RSpec.describe 'char_field', type: :helper do
 
     context 'field is valid' do
       it 'should PASS' do
-        params = { name: 'valid_char' }
+        params = { age: 5 }
         cmd = validator.call(params: params)
 
         expect_success(cmd)
@@ -192,7 +154,7 @@ RSpec.describe 'char_field', type: :helper do
   describe 'check params' do
     describe 'check default value parameter' do
       context 'default value is absent' do
-        let(:validator) { CharField::DefaultValueIsAbsentValidator }
+        let(:validator) { IntField::DefaultValueIsAbsentValidator }
 
         context 'field is absent' do
           it 'should BE PREVENTED' do
@@ -206,32 +168,32 @@ RSpec.describe 'char_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { name: 'valid_char' }
+            params = { age: 5 }
             cmd = validator.call(params: params)
 
-            expect_eq(cmd.result, { name: 'valid_char' })
+            expect_eq(cmd.result, { age: 5 })
           end
         end
       end
 
       context 'default value is present' do
-        let(:validator) { CharField::DefaultValueIsPresentValidator }
+        let(:validator) { IntField::DefaultValueIsPresentValidator }
 
         context 'field is absent' do
           it 'value should BE SET' do
             params = {}
             cmd = validator.call(params: params)
 
-            expect_eq(cmd.result, { name: 'default_char' })
+            expect_eq(cmd.result, { age: 3 })
           end
         end
 
         context 'field is present' do
           it 'value should NOT BE SET' do
-            params = { name: 'valid_char' }
+            params = { age: 5 }
             cmd = validator.call(params: params)
 
-            expect_eq(cmd.result, { name: 'valid_char' })
+            expect_eq(cmd.result, { age: 5 })
           end
         end
       end
@@ -239,7 +201,7 @@ RSpec.describe 'char_field', type: :helper do
 
     describe 'check required parameter' do
       context 'required parameter is true' do
-        let(:validator) { CharField::RequiredValidator }
+        let(:validator) { IntField::RequiredValidator }
 
         context 'field is absent' do
           it 'should BE PREVENTED' do
@@ -253,7 +215,7 @@ RSpec.describe 'char_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { name: 'present_char' }
+            params = { age: 5 }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -262,7 +224,7 @@ RSpec.describe 'char_field', type: :helper do
       end
 
       context 'required parameter is false' do
-        let(:validator) { CharField::NotRequiredValidator }
+        let(:validator) { IntField::NotRequiredValidator }
 
         context 'field is absent' do
           it 'should PASS' do
@@ -275,7 +237,7 @@ RSpec.describe 'char_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { name: 'present_char' }
+            params = { age: 5 }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -284,45 +246,23 @@ RSpec.describe 'char_field', type: :helper do
       end
     end
 
-    describe 'check allow_blank parameter' do
-      context 'allow_blank parameter is true' do
-        let(:validator) { CharField::AllowBlankValidator }
+    describe 'check min parameter' do
+      describe 'min is 10' do
+        let(:validator) { IntField::MinValidator }
 
-        context 'field is blank' do
-          it 'should PASS' do
-            params = { name: '' }
-            cmd = validator.call(params: params)
-
-            expect_success(cmd)
-          end
-        end
-
-        context 'field is not blank' do
-          it 'should PASS' do
-            params = { name: 'not_blank_char' }
-            cmd = validator.call(params: params)
-
-            expect_success(cmd)
-          end
-        end
-      end
-
-      context 'allow_blank parameter is false' do
-        let(:validator) { CharField::NotAllowBlankValidator }
-
-        context 'field is blank' do
+        context 'field is too small' do
           it 'should BE PREVENTED' do
-            params = { name: '' }
+            params = { age: 9 }
             cmd = validator.call(params: params)
 
             expect_fail(cmd)
-            expect_eq(get_field_error(cmd), allow_blank_error_message)
+            expect_eq(get_field_error(cmd), get_max_value_error_message(min: 10))
           end
         end
 
-        context 'field is not blank' do
+        context 'field is big enough' do
           it 'should PASS' do
-            params = { name: 'not_blank_char' }
+            params = { age: 10 }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -331,48 +271,23 @@ RSpec.describe 'char_field', type: :helper do
       end
     end
 
-    describe 'check min_length parameter' do
-      describe 'min_length is 10' do
-        let(:validator) { CharField::MinLengthValidator }
+    describe 'check max parameter' do
+      describe 'max is 9' do
+        let(:validator) { IntField::MaxValidator }
 
-        context 'field is too short' do
+        context 'field is too big' do
           it 'should BE PREVENTED' do
-            params = { name: 'length: 9' }
+            params = { age: 10 }
             cmd = validator.call(params: params)
 
             expect_fail(cmd)
-            expect_eq(get_field_error(cmd), get_max_length_error_message(min_length: 10))
+            expect_eq(get_field_error(cmd), get_max_value_error_message(max: 9))
           end
         end
 
-        context 'field is long enough' do
+        context 'field is small enough' do
           it 'should PASS' do
-            params = { name: 'length: 10' }
-            cmd = validator.call(params: params)
-
-            expect_success(cmd)
-          end
-        end
-      end
-    end
-
-    describe 'check max_length parameter' do
-      describe 'max_length is 9' do
-        let(:validator) { CharField::MaxLengthValidator }
-
-        context 'field is too long' do
-          it 'should BE PREVENTED' do
-            params = { name: 'length: 10' }
-            cmd = validator.call(params: params)
-
-            expect_fail(cmd)
-            expect_eq(get_field_error(cmd), get_max_length_error_message(max_length: 9))
-          end
-        end
-
-        context 'field is short enough' do
-          it 'should PASS' do
-            params = { name: 'length: 9' }
+            params = { age: 9 }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -383,11 +298,11 @@ RSpec.describe 'char_field', type: :helper do
 
     describe 'check allow_nil parameter' do
       context 'allow_nil parameter is true' do
-        let(:validator) { CharField::AllowNilValidator }
+        let(:validator) { IntField::AllowNilValidator }
 
         context 'field is nil' do
           it 'should PASS' do
-            params = { name: nil }
+            params = { age: nil }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -396,7 +311,7 @@ RSpec.describe 'char_field', type: :helper do
 
         context 'field is not nil' do
           it 'should PASS' do
-            params = { name: 'not_nil_char' }
+            params = { age: 5 }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -405,11 +320,11 @@ RSpec.describe 'char_field', type: :helper do
       end
 
       context 'allow_nil parameter is false' do
-        let(:validator) { CharField::NotAllowNilValidator }
+        let(:validator) { IntField::NotAllowNilValidator }
 
         context 'field is nil' do
           it 'should BE PREVENTED' do
-            params = { name: nil }
+            params = { age: nil }
             cmd = validator.call(params: params)
 
             expect_fail(cmd)
@@ -419,7 +334,7 @@ RSpec.describe 'char_field', type: :helper do
 
         context 'field is not nil' do
           it 'should PASS' do
-            params = { name: 'not_nil_char' }
+            params = { age: 5 }
             cmd = validator.call(params: params)
 
             expect_success(cmd)

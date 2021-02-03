@@ -9,15 +9,23 @@ module CharField
   class DefaultValidator < ParamsChecker::BaseParamsChecker
     def init
       {
-        char: char_field
+        name: char_field
       }
     end
   end
 
-  class DefaultValueValidator < ParamsChecker::BaseParamsChecker
+  class DefaultValueIsPresentValidator < ParamsChecker::BaseParamsChecker
     def init
       {
-        char: char_field(default: 'default_char')
+        name: char_field(default: 'default_char')
+      }
+    end
+  end
+
+  class DefaultValueIsAbsentValidator < ParamsChecker::BaseParamsChecker
+    def init
+      {
+        name: char_field
       }
     end
   end
@@ -25,7 +33,7 @@ module CharField
   class NotRequiredValidator < ParamsChecker::BaseParamsChecker
     def init
       {
-        char: char_field(required: false)
+        name: char_field(required: false)
       }
     end
   end
@@ -33,7 +41,7 @@ module CharField
   class RequiredValidator < ParamsChecker::BaseParamsChecker
     def init
       {
-        char: char_field(required: true)
+        name: char_field(required: true)
       }
     end
   end
@@ -41,7 +49,7 @@ module CharField
   class NotAllowBlankValidator < ParamsChecker::BaseParamsChecker
     def init
       {
-        char: char_field(allow_blank: false)
+        name: char_field(allow_blank: false)
       }
     end
   end
@@ -49,7 +57,7 @@ module CharField
   class AllowBlankValidator < ParamsChecker::BaseParamsChecker
     def init
       {
-        char: char_field(allow_blank: true)
+        name: char_field(allow_blank: true)
       }
     end
   end
@@ -57,7 +65,7 @@ module CharField
   class MinLengthValidator < ParamsChecker::BaseParamsChecker
     def init
       {
-        char: char_field(min_length: 10)
+        name: char_field(min_length: 10)
       }
     end
   end
@@ -65,7 +73,7 @@ module CharField
   class MaxLengthValidator < ParamsChecker::BaseParamsChecker
     def init
       {
-        char: char_field(max_length: 9)
+        name: char_field(max_length: 9)
       }
     end
   end
@@ -73,7 +81,7 @@ module CharField
   class NotAllowNilValidator < ParamsChecker::BaseParamsChecker
     def init
       {
-        char: char_field(allow_nil: false)
+        name: char_field(allow_nil: false)
       }
     end
   end
@@ -81,7 +89,7 @@ module CharField
   class AllowNilValidator < ParamsChecker::BaseParamsChecker
     def init
       {
-        char: char_field(allow_nil: true)
+        name: char_field(allow_nil: true)
       }
     end
   end
@@ -89,7 +97,7 @@ module CharField
   class InvalidMinLengthTypeValidator < ParamsChecker::BaseParamsChecker
     def init
       {
-        char: char_field(min_length: 'invalid_min_length')
+        name: char_field(min_length: 'invalid_min_length')
       }
     end
   end
@@ -97,7 +105,7 @@ module CharField
   class InvalidMaxLengthTypeValidator < ParamsChecker::BaseParamsChecker
     def init
       {
-        char: char_field(max_length: 'invalid_max_length')
+        name: char_field(max_length: 'invalid_max_length')
       }
     end
   end
@@ -105,7 +113,7 @@ module CharField
   class InvalidRequiredTypeValidator < ParamsChecker::BaseParamsChecker
     def init
       {
-        char: char_field(required: 'invalid_required')
+        name: char_field(required: 'invalid_required')
       }
     end
   end
@@ -113,7 +121,7 @@ module CharField
   class InvalidAllowBlankTypeValidator < ParamsChecker::BaseParamsChecker
     def init
       {
-        char: char_field(allow_blank: 'invalid_allow_blank')
+        name: char_field(allow_blank: 'invalid_allow_blank')
       }
     end
   end
@@ -121,7 +129,7 @@ module CharField
   class InvalidAllowNilTypeValidator < ParamsChecker::BaseParamsChecker
     def init
       {
-        char: char_field(allow_nil: 'invalid_allow_nil')
+        name: char_field(allow_nil: 'invalid_allow_nil')
       }
     end
   end
@@ -129,15 +137,23 @@ module CharField
   class InvalidMinLengthValueValidator < ParamsChecker::BaseParamsChecker
     def init
       {
-        char: char_field(min_length: -1)
+        name: char_field(min_length: -1)
       }
     end
   end
 
-  class InvalidMaxLengthValueValidator < ParamsChecker::BaseParamsChecker
+  class InvalidMaxLengthValueValidator1 < ParamsChecker::BaseParamsChecker
     def init
       {
-        char: char_field(max_length: 256)
+        name: char_field(max_length: 256)
+      }
+    end
+  end
+
+  class InvalidMaxLengthValueValidator2 < ParamsChecker::BaseParamsChecker
+    def init
+      {
+        name: char_field(max_length: 3000)
       }
     end
   end
