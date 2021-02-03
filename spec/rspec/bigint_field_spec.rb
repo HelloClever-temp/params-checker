@@ -74,7 +74,7 @@ RSpec.describe 'bigint_field', type: :helper do
       end
 
       context 'field is too big' do
-        it 'should PASS' do
+        it 'should BE PREVENTED' do
           params = {
             age: 2_000_000_000_001
           }
