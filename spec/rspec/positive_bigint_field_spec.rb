@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'validators/positive_int_field'
+require 'validators/positive_bigint_field'
 require 'shared_contexts/base'
 require 'helper/base'
 
