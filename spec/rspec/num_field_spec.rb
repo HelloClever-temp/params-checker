@@ -1,50 +1,50 @@
 require 'rails_helper'
-require 'validators/int_field'
+require 'validators/num_field'
 require 'shared_contexts/base'
 require 'helper/base'
 # require 'helper/int_field'
 
 # rubocop:disable Metricts/BlockLength
-RSpec.describe 'int_field', type: :helper do
+RSpec.describe 'num_field', type: :helper do
   include_context 'error_messages'
 
-  let(:allow_nil_error_message) { "This field's type must be integer." }
+  let(:allow_nil_error_message) { "This field's type must be numeric." }
 
   def get_field_error(cmd)
     R_.get(cmd.errors, 'errors[0].field_errors.age')
   end
 
   def get_value_error_message(min: -2_000_000_000, max: 2_000_000_000)
-    "This integer field's value must be in range from #{min} to #{max}."
+    "This numeric field's value must be in range from #{min} to #{max}."
   end
 
   describe 'check param_checker arguments' do
     describe 'check type' do
       describe 'check min' do
-        context 'type is not integer' do
-          let(:validator) { IntField::InvalidMinTypeValidator }
+        context 'type is not num' do
+          let(:validator) { NumField::InvalidMinTypeValidator }
 
           it 'should RAISE ERROR' do
             expect_raise(validator)
-            expect_raise_message(validator, integer_argument_error_message)
+            expect_raise_message(validator, numeric_argument_error_message)
           end
         end
       end
 
       describe 'check max' do
-        context 'type is not integer' do
-          let(:validator) { IntField::InvalidMaxTypeValidator }
+        context 'type is not num' do
+          let(:validator) { NumField::InvalidMaxTypeValidator }
 
           it 'should RAISE ERROR' do
             expect_raise(validator)
-            expect_raise_message(validator, integer_argument_error_message)
+            expect_raise_message(validator, numeric_argument_error_message)
           end
         end
       end
 
       describe 'check required' do
         context 'type is not boolean' do
-          let(:validator) { IntField::InvalidRequiredTypeValidator }
+          let(:validator) { NumField::InvalidRequiredTypeValidator }
 
           it 'should RAISE ERROR' do
             expect_raise(validator)
@@ -55,7 +55,7 @@ RSpec.describe 'int_field', type: :helper do
 
       describe 'check allow_nil' do
         context 'type is not boolean' do
-          let(:validator) { IntField::InvalidAllowNilTypeValidator }
+          let(:validator) { NumField::InvalidAllowNilTypeValidator }
 
           it 'should RAISE ERROR' do
             expect_raise(validator)
@@ -68,22 +68,22 @@ RSpec.describe 'int_field', type: :helper do
     describe 'check value' do
       describe 'check min' do
         context 'value is invalid' do
-          let(:validator) { IntField::InvalidMinValueValidator }
+          let(:validator) { NumField::InvalidMinValueValidator }
 
           it 'should RAISE ERROR' do
             expect_raise(validator)
-            expect_raise_message(validator, int_length_error_message)
+            expect_raise_message(validator, num_length_error_message)
           end
         end
       end
 
       describe 'check max' do
         context 'value is invalid' do
-          let(:validator) { IntField::InvalidMaxValueValidator }
+          let(:validator) { NumField::InvalidMaxValueValidator }
 
           it 'should RAISE ERROR' do
             expect_raise(validator)
-            expect_raise_message(validator, int_length_error_message)
+            expect_raise_message(validator, num_length_error_message)
           end
         end
       end
@@ -91,7 +91,7 @@ RSpec.describe 'int_field', type: :helper do
   end
 
   describe 'check default param_checker' do
-    let(:validator) { IntField::DefaultValidator }
+    let(:validator) { NumField::DefaultValidator }
 
     describe 'check default required parameter' do
       context 'field is absent' do
@@ -156,21 +156,9 @@ RSpec.describe 'int_field', type: :helper do
       end
     end
 
-    describe 'check value' do
-      context 'value is decimal' do
-        it 'should BE PREVENTED' do
-          params = { age: 0.5 }
-          cmd = validator.call(params: params)
-
-          expect_fail(cmd)
-          expect_eq(get_field_error(cmd), integer_argument_error_message)
-        end
-      end
-    end
-
     context 'field is valid' do
       it 'should PASS' do
-        params = { age: 5 }
+        params = { age: 5.5 }
         cmd = validator.call(params: params)
 
         expect_success(cmd)
@@ -181,7 +169,7 @@ RSpec.describe 'int_field', type: :helper do
   describe 'check params' do
     describe 'check default value parameter' do
       context 'default value is absent' do
-        let(:validator) { IntField::DefaultValueIsAbsentValidator }
+        let(:validator) { NumField::DefaultValueIsAbsentValidator }
 
         context 'field is absent' do
           it 'should BE PREVENTED' do
@@ -195,16 +183,16 @@ RSpec.describe 'int_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { age: 5 }
+            params = { age: 5.5 }
             cmd = validator.call(params: params)
 
-            expect_eq(cmd.result, { age: 5 })
+            expect_eq(cmd.result, { age: 5.5 })
           end
         end
       end
 
       context 'default value is present' do
-        let(:validator) { IntField::DefaultValueIsPresentValidator }
+        let(:validator) { NumField::DefaultValueIsPresentValidator }
 
         context 'field is absent' do
           it 'value should BE SET' do
@@ -217,10 +205,10 @@ RSpec.describe 'int_field', type: :helper do
 
         context 'field is present' do
           it 'value should NOT BE SET' do
-            params = { age: 5 }
+            params = { age: 5.5 }
             cmd = validator.call(params: params)
 
-            expect_eq(cmd.result, { age: 5 })
+            expect_eq(cmd.result, { age: 5.5 })
           end
         end
       end
@@ -228,7 +216,7 @@ RSpec.describe 'int_field', type: :helper do
 
     describe 'check required parameter' do
       context 'required parameter is true' do
-        let(:validator) { IntField::RequiredValidator }
+        let(:validator) { NumField::RequiredValidator }
 
         context 'field is absent' do
           it 'should BE PREVENTED' do
@@ -242,7 +230,7 @@ RSpec.describe 'int_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { age: 5 }
+            params = { age: 5.5 }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -251,7 +239,7 @@ RSpec.describe 'int_field', type: :helper do
       end
 
       context 'required parameter is false' do
-        let(:validator) { IntField::NotRequiredValidator }
+        let(:validator) { NumField::NotRequiredValidator }
 
         context 'field is absent' do
           it 'should PASS' do
@@ -264,7 +252,7 @@ RSpec.describe 'int_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { age: 5 }
+            params = { age: 5.5 }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -275,21 +263,21 @@ RSpec.describe 'int_field', type: :helper do
 
     describe 'check min parameter' do
       describe 'min is 10' do
-        let(:validator) { IntField::MinValidator }
+        let(:validator) { NumField::MinValidator }
 
         context 'field is too small' do
           it 'should BE PREVENTED' do
-            params = { age: 9 }
+            params = { age: 9.5 }
             cmd = validator.call(params: params)
 
             expect_fail(cmd)
-            expect_eq(get_field_error(cmd), get_value_error_message(min: 10))
+            expect_eq(get_field_error(cmd), get_value_error_message(min: 10.5))
           end
         end
 
         context 'field is not too small' do
           it 'should PASS' do
-            params = { age: 10 }
+            params = { age: 10.5 }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -300,21 +288,21 @@ RSpec.describe 'int_field', type: :helper do
 
     describe 'check max parameter' do
       describe 'max is 9' do
-        let(:validator) { IntField::MaxValidator }
+        let(:validator) { NumField::MaxValidator }
 
         context 'field is too big' do
           it 'should BE PREVENTED' do
-            params = { age: 10 }
+            params = { age: 10.5 }
             cmd = validator.call(params: params)
 
             expect_fail(cmd)
-            expect_eq(get_field_error(cmd), get_value_error_message(max: 9))
+            expect_eq(get_field_error(cmd), get_value_error_message(max: 9.5))
           end
         end
 
         context 'field is not too big' do
           it 'should PASS' do
-            params = { age: 9 }
+            params = { age: 9.5 }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -325,7 +313,7 @@ RSpec.describe 'int_field', type: :helper do
 
     describe 'check allow_nil parameter' do
       context 'allow_nil parameter is true' do
-        let(:validator) { IntField::AllowNilValidator }
+        let(:validator) { NumField::AllowNilValidator }
 
         context 'field is nil' do
           it 'should PASS' do
@@ -338,7 +326,7 @@ RSpec.describe 'int_field', type: :helper do
 
         context 'field is not nil' do
           it 'should PASS' do
-            params = { age: 5 }
+            params = { age: 5.5 }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -347,7 +335,7 @@ RSpec.describe 'int_field', type: :helper do
       end
 
       context 'allow_nil parameter is false' do
-        let(:validator) { IntField::NotAllowNilValidator }
+        let(:validator) { NumField::NotAllowNilValidator }
 
         context 'field is nil' do
           it 'should BE PREVENTED' do
@@ -361,7 +349,7 @@ RSpec.describe 'int_field', type: :helper do
 
         context 'field is not nil' do
           it 'should PASS' do
-            params = { age: 5 }
+            params = { age: 5.5 }
             cmd = validator.call(params: params)
 
             expect_success(cmd)

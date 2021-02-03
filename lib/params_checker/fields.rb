@@ -55,7 +55,7 @@ module ParamsChecker
       max: 2_000_000_000_000,
       allow_nil: false
     )
-      Helper.check_type(type: 'numberic', values: [min, max])
+      Helper.check_type(type: 'numeric', values: [min, max])
       Helper.check_type(type: 'boolean', values: [required, allow_nil])
       raise 'Invalid numeric value.' unless (min >= -2_000_000_000_000) && (max <= 2_000_000_000_000)
 
@@ -76,7 +76,7 @@ module ParamsChecker
       max: 2_000_000_000,
       allow_nil: false
     )
-      Helper.check_type(type: 'numberic', values: [min, max])
+      Helper.check_type(type: 'numeric', values: [min, max])
       Helper.check_type(type: 'boolean', values: [required, allow_nil])
       raise 'Invalid numeric value.' unless (min >= -2_000_000_000) && (max <= 2_000_000_000)
 
@@ -138,7 +138,7 @@ module ParamsChecker
       min: 0, max: 2_000_000_000_000,
       allow_nil: false
     )
-      Helper.check_type(type: 'numberic', values: [min, max])
+      Helper.check_type(type: 'numeric', values: [min, max])
       Helper.check_type(type: 'boolean', values: [required, allow_nil])
       raise 'Invalid numeric value.' unless (min >= 0) && (max <= 2_000_000_000_000)
 
@@ -159,7 +159,7 @@ module ParamsChecker
       max: 2_000_000_000, 
       allow_nil: false
     )
-      Helper.check_type(type: 'numberic', values: [min, max])
+      Helper.check_type(type: 'numeric', values: [min, max])
       Helper.check_type(type: 'boolean', values: [required, allow_nil])
       raise 'Invalid numeric value.' unless (min >= 0) && (max <= 2_000_000_000)
 

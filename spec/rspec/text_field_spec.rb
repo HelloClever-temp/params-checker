@@ -1,10 +1,13 @@
 require 'rails_helper'
 require 'validators/text_field'
 require 'validators/char_field'
+require 'shared_contexts/base'
 require 'helper/base'
 
 # only need to test arguments that is diffirent from the char_field
 RSpec.describe 'text_field', type: :helper do
+  include_context 'error_messages'
+
   let(:text_length_error_message) { 'Invalid text length.' }
 
   def get_field_error(cmd)
