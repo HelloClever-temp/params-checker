@@ -65,7 +65,7 @@ RSpec.describe 'bignum_field', type: :helper do
       context 'field is not too big' do
         it 'should PASS' do
           params = {
-            age: 2_000_000_001
+            age: 2_000_000_001.5
           }
           cmd = validator.call(params: params)
 
@@ -76,7 +76,7 @@ RSpec.describe 'bignum_field', type: :helper do
       context 'field is too big' do
         it 'should BE PREVENTED' do
           params = {
-            age: 2_000_000_000_001
+            age: 2_000_000_000_001.5
           }
           cmd = validator.call(params: params)
 
@@ -90,7 +90,7 @@ RSpec.describe 'bignum_field', type: :helper do
       context 'field is not too small' do
         it 'should PASS' do
           params = {
-            age: -2_000_000_001
+            age: -2_000_000_001.5
           }
           cmd = validator.call(params: params)
 
@@ -101,7 +101,7 @@ RSpec.describe 'bignum_field', type: :helper do
       context 'field is too small' do
         it 'should BE PREVENTED' do
           params = {
-            age: -2_000_000_000_001
+            age: -2_000_000_000_001.5
           }
           cmd = validator.call(params: params)
 
