@@ -2,20 +2,22 @@ require 'rails_helper'
 require 'validators/int_field'
 require 'shared_contexts/base'
 require 'helper/base'
-require 'helper/int_field'
-
-# TODO:
-# - more tests about default value param
+# require 'helper/int_field'
 
 # rubocop:disable Metricts/BlockLength
 RSpec.describe 'int_field', type: :helper do
-  include_context 'required_error_message'
-  include_context 'integer_argument_error_message'
-  include_context 'numberic_argument_error_message'
-  include_context 'boolean_argument_error_message'
+  include_context 'error_messages'
 
   let(:allow_nil_error_message) { "This field's type must be integer." }
   let(:int_length_error_message) { 'Invalid integer value.' }
+
+  def get_field_error(cmd)
+    R_.get(cmd.errors, 'errors[0].field_errors.age')
+  end
+
+  def get_value_error_message(min: -2_000_000_000, max: 2_000_000_000)
+    "This integer field's value must be in range from #{min} to #{max}."
+  end
 
   describe 'check param_checker arguments' do
     describe 'check type' do
@@ -115,6 +117,20 @@ RSpec.describe 'int_field', type: :helper do
       end
     end
 
+    describe 'check default min_value parameter' do
+      context 'field is too big' do
+        it 'should BE PREVENTED' do
+          params = {
+            age: -2_000_000_001
+          }
+          cmd = validator.call(params: params)
+
+          expect_fail(cmd)
+          expect_eq(get_field_error(cmd), get_value_error_message)
+        end
+      end
+    end
+
     describe 'check default max_value parameter' do
       context 'field is too big' do
         it 'should BE PREVENTED' do
@@ -124,7 +140,7 @@ RSpec.describe 'int_field', type: :helper do
           cmd = validator.call(params: params)
 
           expect_fail(cmd)
-          expect_eq(get_field_error(cmd), get_max_value_error_message)
+          expect_eq(get_field_error(cmd), get_value_error_message)
         end
       end
     end
@@ -256,11 +272,11 @@ RSpec.describe 'int_field', type: :helper do
             cmd = validator.call(params: params)
 
             expect_fail(cmd)
-            expect_eq(get_field_error(cmd), get_max_value_error_message(min: 10))
+            expect_eq(get_field_error(cmd), get_value_error_message(min: 10))
           end
         end
 
-        context 'field is big enough' do
+        context 'field is not too small' do
           it 'should PASS' do
             params = { age: 10 }
             cmd = validator.call(params: params)
@@ -281,11 +297,11 @@ RSpec.describe 'int_field', type: :helper do
             cmd = validator.call(params: params)
 
             expect_fail(cmd)
-            expect_eq(get_field_error(cmd), get_max_value_error_message(max: 9))
+            expect_eq(get_field_error(cmd), get_value_error_message(max: 9))
           end
         end
 
-        context 'field is small enough' do
+        context 'field is not too big' do
           it 'should PASS' do
             params = { age: 9 }
             cmd = validator.call(params: params)

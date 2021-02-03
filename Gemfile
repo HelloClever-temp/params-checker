@@ -18,6 +18,6 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'simple_command'
   gem 'pry'
-  # gem 'zeus'
+  gem 'zeus'
   gem 'rudash'
 end

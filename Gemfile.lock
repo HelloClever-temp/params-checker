@@ -155,6 +155,8 @@ GEM
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.4)
     zeitwerk (2.3.0)
+    zeus (0.15.14)
+      method_source (>= 0.6.7)
 
 PLATFORMS
   ruby
@@ -166,6 +168,7 @@ DEPENDENCIES
   rudash
   simple_command
   sqlite3
+  zeus
 
 BUNDLED WITH
    2.1.4

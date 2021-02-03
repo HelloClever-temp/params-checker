@@ -3,21 +3,22 @@ require 'validators/char_field'
 require 'validators/text_field'
 require 'shared_contexts/base'
 require 'helper/base'
-require 'helper/char_field'
-
-# TODO:
-# - more tests about default value param
+# require 'helper/char_field'
 
 # rubocop:disable Metricts/BlockLength
 RSpec.describe 'char_field', type: :helper do
-  include_context 'required_error_message'
-  include_context 'allow_blank_error_message'
-  include_context 'integer_argument_error_message'
-  include_context 'numberic_argument_error_message'
-  include_context 'boolean_argument_error_message'
+  include_context 'error_messages'
 
   let(:allow_nil_error_message) { "This field's type must be string." }
   let(:char_length_error_message) { 'Invalid char length.' }
+
+  def get_field_error(cmd)
+    R_.get(cmd.errors, 'errors[0].field_errors.name')
+  end
+
+  def get_length_error_message(min_length: 0, max_length: 255)
+    "This string field's length must be in range from #{min_length} to #{max_length}."
+  end
 
   describe 'check param_checker arguments' do
     describe 'check type' do
@@ -90,17 +91,8 @@ RSpec.describe 'char_field', type: :helper do
       end
 
       describe 'check max_length' do
-        context 'value is invalid (256)' do
-          let(:validator) { CharField::InvalidMaxLengthValueValidator1 }
-
-          it 'should RAISE ERROR' do
-            expect_raise(validator)
-            expect_raise_message(validator, char_length_error_message)
-          end
-        end
-
-        context 'value is invalid (3000)' do
-          let(:validator) { CharField::InvalidMaxLengthValueValidator2 }
+        context 'value is invalid' do
+          let(:validator) { CharField::InvalidMaxLengthValueValidator }
 
           it 'should RAISE ERROR' do
             expect_raise(validator)
@@ -152,17 +144,11 @@ RSpec.describe 'char_field', type: :helper do
     describe 'check default max_value parameter' do
       context 'field is too long' do
         it 'should BE PREVENTED' do
-          params = {
-            name: '70jqfYkkZsXVagVLUAJMQjTMLC6BJAPzryxjSX1CXri
-              IyvIN8iWZjfQ5UYsheouXnTTvmKaVbSmvFOo5naA5QWKeLtR02ngX8VFGqs
-              9mouekJqqqICfYJJcSizvDsNfCHNMA26eomvrfry1gLsxCkQ6PagKOrJ266
-              BhAutIT6bfeNUE6ywA9gMyz6keUkumB1AYJy7i1BgAarHydqMvNOKKIoCVm
-              V5Jg5qw9LVyfgUjeAEivzAdvwSdMKXQ0TGjx'
-          }
+          params = { name: 'a' * 256 }
           cmd = validator.call(params: params)
 
           expect_fail(cmd)
-          expect_eq(get_field_error(cmd), get_max_length_error_message)
+          expect_eq(get_field_error(cmd), get_length_error_message)
         end
       end
     end
@@ -341,11 +327,11 @@ RSpec.describe 'char_field', type: :helper do
             cmd = validator.call(params: params)
 
             expect_fail(cmd)
-            expect_eq(get_field_error(cmd), get_max_length_error_message(min_length: 10))
+            expect_eq(get_field_error(cmd), get_length_error_message(min_length: 10))
           end
         end
 
-        context 'field is long enough' do
+        context 'field is not too short' do
           it 'should PASS' do
             params = { name: 'length: 10' }
             cmd = validator.call(params: params)
@@ -366,11 +352,11 @@ RSpec.describe 'char_field', type: :helper do
             cmd = validator.call(params: params)
 
             expect_fail(cmd)
-            expect_eq(get_field_error(cmd), get_max_length_error_message(max_length: 9))
+            expect_eq(get_field_error(cmd), get_length_error_message(max_length: 9))
           end
         end
 
-        context 'field is short enough' do
+        context 'field is not too long' do
           it 'should PASS' do
             params = { name: 'length: 9' }
             cmd = validator.call(params: params)

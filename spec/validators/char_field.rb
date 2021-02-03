@@ -142,18 +142,10 @@ module CharField
     end
   end
 
-  class InvalidMaxLengthValueValidator1 < ParamsChecker::BaseParamsChecker
+  class InvalidMaxLengthValueValidator < ParamsChecker::BaseParamsChecker
     def init
       {
         name: char_field(max_length: 256)
-      }
-    end
-  end
-
-  class InvalidMaxLengthValueValidator2 < ParamsChecker::BaseParamsChecker
-    def init
-      {
-        name: char_field(max_length: 3000)
       }
     end
   end
