@@ -14,7 +14,7 @@ module HashField
   class DefaultValueIsPresentValidator < ParamsChecker::BaseParamsChecker
     def init
       {
-        person: hash_field(default: 3)
+        person: hash_field(default: { name: 'Vu' })
       }
     end
   end

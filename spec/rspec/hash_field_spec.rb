@@ -7,7 +7,7 @@ require 'helper/base'
 RSpec.describe 'hash_field', type: :helper do
   include_context 'error_messages'
 
-  let(:valid_value) { true }
+  let(:valid_value) { { name: 'Ted' } }
   let(:allow_nil_error_message) { "This field's type must be hash." }
   let(:invalid_hash_error_message) { "This field's type must be hash." }
 
@@ -24,7 +24,7 @@ RSpec.describe 'hash_field', type: :helper do
           it 'should RAISE ERROR' do
             # binding.pry
             expect_raise(validator)
-            expect_raise_message(validator, invalid_hash_error_message)
+            expect_raise_message(validator, boolean_argument_error_message)
           end
         end
       end
@@ -35,7 +35,7 @@ RSpec.describe 'hash_field', type: :helper do
 
           it 'should RAISE ERROR' do
             expect_raise(validator)
-            expect_raise_message(validator, invalid_hash_error_message)
+            expect_raise_message(validator, boolean_argument_error_message)
           end
         end
       end
@@ -137,7 +137,7 @@ RSpec.describe 'hash_field', type: :helper do
             params = {}
             cmd = validator.call(params: params)
 
-            expect_eq(cmd.result, { person: false })
+            expect_eq(cmd.result, { person: { name: 'Vu' } })
           end
         end
 
