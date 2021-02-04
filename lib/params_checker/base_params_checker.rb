@@ -17,7 +17,7 @@ module ParamsChecker
     end
 
     def self.init(required: true, many: false)
-      raise "This field's type must be boolean." if [required, many].any? { |value| !value.in? [true, false] }
+      raise "This field's type must be hash." if [required, many].any? { |value| !value.in? [true, false] }
 
       type = many ? 'nested_hashs' : 'nested_hash'
 
@@ -236,7 +236,7 @@ module ParamsChecker
         {
           message: DEFAULT_MESSAGE_ERROR,
           error_type: 'fields_errors',
-          field_errors: field_errors,
+          field_errors: field_errors
         }
       )
     end
