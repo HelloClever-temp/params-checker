@@ -273,28 +273,6 @@ module ParamsChecker
       end
     end
 
-    class EmailParamChecker < BaseParamChecker
-      prepend SimpleCommand
-
-      def call
-        return nil if schema[key][:allow_nil] && params[key].nil?
-
-        check_type && check_regrex && params[key]
-      end
-
-      def check_type
-        valid = params[key].is_a? String
-        add_field_error('Invalid email.') unless valid
-        valid
-      end
-
-      def check_regrex
-        valid = params[key].match(URI::MailTo::EMAIL_REGEXP)
-        add_field_error('Invalid email.') unless valid
-        valid
-      end
-    end
-
     class BooleanChecker < BaseParamChecker
       prepend SimpleCommand
 

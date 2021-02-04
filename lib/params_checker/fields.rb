@@ -292,21 +292,6 @@ module ParamsChecker
       }
     end
 
-    def email_field(
-      required: true,
-      default: nil,
-      allow_nil: false
-    )
-      Helper.check_type(type: 'boolean', values: [required, allow_nil])
-
-      {
-        type: 'email',
-        default: default,
-        required: required,
-        allow_nil: allow_nil
-      }
-    end
-
     def boolean_field(
       required: true,
       default: nil,

@@ -169,8 +169,6 @@ module ParamsChecker
         ParamChecker::TimeParamChecker.call(key, schema, params)
       when 'datetime'
         ParamChecker::DateTimeParamChecker.call(key, schema, params)
-      when 'email'
-        ParamChecker::EmailParamChecker.call(key, schema, params)
       when 'boolean'
         ParamChecker::BooleanChecker.call(key, schema, params)
       when 'file'
