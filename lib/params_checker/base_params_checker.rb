@@ -80,48 +80,41 @@ module ParamsChecker
     end
 
     def all_fields_of_params_are_valid?
-      return @all_fields_of_params_are_valid if @all_fields_of_params_are_valid.present?
+      @all_fields_of_params_are_valid ||=
+        schema.all? do |key, _|
+          set_default_value(key) if need_to_set_default_value?(key)
 
-      @all_fields_of_params_are_valid = true
-      schema.each do |key, value|
-        @all_fields_of_params_are_valid = false unless field_is_valid?(key)
-      end
-      @all_fields_of_params_are_valid
+          field_is_valid?(key)
+        end
     end
 
     def field_is_valid?(key)
-      if value_need_to_be_present?(key)
-        if value_present?(key)
-          if value_valid?(key)
-            true
-          else
-            false
-          end
-        else
-          errors.add(key, 'This field is required.')
-          false
-        end
-      else
-        if value_present?(key)
-          if value_valid?(key)
-            true
-          else
-            false
-          end
-        else
-          true
-        end
-      end
+      return value_valid?(key) if value_present?(key)
+
+      return true unless value_need_to_be_present?(key)
+
+      errors.add(key, 'This field is required.')
+      false
+    end
+
+    def need_to_set_default_value?(key)
+      value_is_nil = @params[key].nil?
+      schema_field_has_default_value_key = schema[key].key?(:default)
+      default_value_is_set = !schema[key][:default].nil?
+
+      value_is_nil &&
+        schema_field_has_default_value_key &&
+        default_value_is_set
+    end
+
+    def set_default_value(key)
+      @params[key] = schema[key][:default]
     end
 
     def value_need_to_be_present?(key)
-      if schema[key].key?(:default) && !schema[key][:default].nil?
-        @params[key].nil? && @params[key] = schema[key][:default]
+      return true if schema[key].key?(:default) && !schema[key][:default].nil?
 
-        true
-      else
-        schema[key][:required]
-      end
+      schema[key][:required]
     end
 
     def value_present?(key)
