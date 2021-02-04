@@ -159,6 +159,18 @@ RSpec.describe 'num_field', type: :helper do
       end
     end
 
+    describe 'check value' do
+      context 'value is not numeric' do
+        it 'should BE PREVENTED' do
+          params = { age: 'invalid numeric' }
+          cmd = validator.call(params: params)
+
+          expect_fail(cmd)
+          expect_eq(get_field_error(cmd), numeric_argument_error_message)
+        end
+      end
+    end
+
     context 'field is valid' do
       it 'should PASS' do
         params = { age: valid_value }

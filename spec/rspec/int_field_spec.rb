@@ -160,7 +160,7 @@ RSpec.describe 'int_field', type: :helper do
     end
 
     describe 'check value' do
-      context 'value is decimal' do
+      context 'value is not integer' do
         it 'should BE PREVENTED' do
           params = { age: 0.5 }
           cmd = validator.call(params: params)

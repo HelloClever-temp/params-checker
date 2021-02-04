@@ -1,25 +1,25 @@
 require 'rails_helper'
-require 'validators/date_time_field'
+require 'validators/boolean_field'
 require 'shared_contexts/base'
 require 'helper/base'
 
 # rubocop:disable Metricts/BlockLength
-RSpec.describe 'date_time_field', type: :helper do
+RSpec.describe 'boolean_field', type: :helper do
   include_context 'error_messages'
 
-  let(:valid_value) { '2020-13-01 04:05:05' }
-  let(:allow_nil_error_message) { 'Invalid datetime.' }
-  let(:invalid_datetime_error_message) { 'Invalid datetime.' }
+  let(:valid_value) { true }
+  let(:allow_nil_error_message) { "This field's type must be boolean." }
+  let(:invalid_boolean_error_message) { "This field's type must be boolean." }
 
   def get_field_error(cmd)
-    R_.get(cmd.errors, 'errors[0].field_errors.created_at')
+    R_.get(cmd.errors, 'errors[0].field_errors.active')
   end
 
   describe 'check param_checker arguments' do
     describe 'check type' do
       describe 'check required' do
         context 'type is not boolean' do
-          let(:validator) { DateTimeField::InvalidRequiredTypeValidator }
+          let(:validator) { BooleanField::InvalidRequiredTypeValidator }
 
           it 'should RAISE ERROR' do
             expect_raise(validator)
@@ -30,7 +30,7 @@ RSpec.describe 'date_time_field', type: :helper do
 
       describe 'check allow_nil' do
         context 'type is not boolean' do
-          let(:validator) { DateTimeField::InvalidAllowNilTypeValidator }
+          let(:validator) { BooleanField::InvalidAllowNilTypeValidator }
 
           it 'should RAISE ERROR' do
             expect_raise(validator)
@@ -42,7 +42,7 @@ RSpec.describe 'date_time_field', type: :helper do
   end
 
   describe 'check default param_checker' do
-    let(:validator) { DateTimeField::DefaultValidator }
+    let(:validator) { BooleanField::DefaultValidator }
 
     describe 'check default required parameter' do
       context 'field is absent' do
@@ -72,9 +72,9 @@ RSpec.describe 'date_time_field', type: :helper do
     describe 'check default allow_nil parameter' do
       context 'field is nil' do
         it 'should BE PREVENTED' do
-          params = { created_at: nil }
+          params = { active: nil }
           cmd = validator.call(params: params)
-
+          # binding.pry
           expect_fail(cmd)
           expect_eq(get_field_error(cmd), allow_nil_error_message)
         end
@@ -82,22 +82,22 @@ RSpec.describe 'date_time_field', type: :helper do
     end
 
     describe 'check value' do
-      context 'value is not valid datetime format' do
+      context 'value is not boolean' do
         it 'should BE PREVENTED' do
-          params = { created_at: valid_value }
+          params = { active: 'invalid_value' }
           cmd = validator.call(params: params)
 
           expect_fail(cmd)
-          expect_eq(get_field_error(cmd), invalid_datetime_error_message)
+          expect_eq(get_field_error(cmd), invalid_boolean_error_message)
         end
       end
     end
 
     context 'field is valid' do
       it 'should PASS' do
-        params = { created_at: '2020-01-01 04:05:05' }
+        params = { active: valid_value }
         cmd = validator.call(params: params)
-        # binding.pry
+
         expect_success(cmd)
       end
     end
@@ -106,7 +106,7 @@ RSpec.describe 'date_time_field', type: :helper do
   describe 'check params' do
     describe 'check default value parameter' do
       context 'default value is absent' do
-        let(:validator) { DateTimeField::DefaultValueIsAbsentValidator }
+        let(:validator) { BooleanField::DefaultValueIsAbsentValidator }
 
         context 'field is absent' do
           it 'should BE PREVENTED' do
@@ -120,32 +120,32 @@ RSpec.describe 'date_time_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { created_at: '2020-01-01 04:05:05' }
+            params = { active: valid_value }
             cmd = validator.call(params: params)
 
-            expect_eq(cmd.result, { created_at: DateTime.parse('2020-01-01 04:05:05') })
+            expect_eq(cmd.result, { active: valid_value })
           end
         end
       end
 
       context 'default value is present' do
-        let(:validator) { DateTimeField::DefaultValueIsPresentValidator }
+        let(:validator) { BooleanField::DefaultValueIsPresentValidator }
 
         context 'field is absent' do
           it 'value should BE SET' do
             params = {}
             cmd = validator.call(params: params)
 
-            expect_eq(cmd.result, { created_at: DateTime.parse('2020-01-01 04:05:06') })
+            expect_eq(cmd.result, { active: false })
           end
         end
 
         context 'field is present' do
           it 'value should NOT BE SET' do
-            params = { created_at: '2020-01-01 04:05:05' }
+            params = { active: valid_value }
             cmd = validator.call(params: params)
 
-            expect_eq(cmd.result, { created_at: DateTime.parse('2020-01-01 04:05:05') })
+            expect_eq(cmd.result, { active: valid_value })
           end
         end
       end
@@ -153,7 +153,7 @@ RSpec.describe 'date_time_field', type: :helper do
 
     describe 'check required parameter' do
       context 'required parameter is true' do
-        let(:validator) { DateTimeField::RequiredValidator }
+        let(:validator) { BooleanField::RequiredValidator }
 
         context 'field is absent' do
           it 'should BE PREVENTED' do
@@ -167,7 +167,7 @@ RSpec.describe 'date_time_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { created_at: '2020-01-01 04:05:05' }
+            params = { active: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -176,7 +176,7 @@ RSpec.describe 'date_time_field', type: :helper do
       end
 
       context 'required parameter is false' do
-        let(:validator) { DateTimeField::NotRequiredValidator }
+        let(:validator) { BooleanField::NotRequiredValidator }
 
         context 'field is absent' do
           it 'should PASS' do
@@ -189,7 +189,7 @@ RSpec.describe 'date_time_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { created_at: '2020-01-01 04:05:05' }
+            params = { active: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -200,11 +200,11 @@ RSpec.describe 'date_time_field', type: :helper do
 
     describe 'check allow_nil parameter' do
       context 'allow_nil parameter is true' do
-        let(:validator) { DateTimeField::AllowNilValidator }
+        let(:validator) { BooleanField::AllowNilValidator }
 
         context 'field is nil' do
           it 'should PASS' do
-            params = { created_at: nil }
+            params = { active: nil }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -213,7 +213,7 @@ RSpec.describe 'date_time_field', type: :helper do
 
         context 'field is not nil' do
           it 'should PASS' do
-            params = { created_at: '2020-01-01 04:05:05' }
+            params = { active: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -222,11 +222,11 @@ RSpec.describe 'date_time_field', type: :helper do
       end
 
       context 'allow_nil parameter is false' do
-        let(:validator) { DateTimeField::NotAllowNilValidator }
+        let(:validator) { BooleanField::NotAllowNilValidator }
 
         context 'field is nil' do
           it 'should BE PREVENTED' do
-            params = { created_at: nil }
+            params = { active: nil }
             cmd = validator.call(params: params)
 
             expect_fail(cmd)
@@ -236,7 +236,7 @@ RSpec.describe 'date_time_field', type: :helper do
 
         context 'field is not nil' do
           it 'should PASS' do
-            params = { created_at: '2020-01-01 04:05:05' }
+            params = { active: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)

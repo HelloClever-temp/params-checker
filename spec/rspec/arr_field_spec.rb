@@ -8,6 +8,7 @@ RSpec.describe 'arr_field', type: :helper do
   include_context 'error_messages'
 
   let(:valid_value) { ['To kill a Mockingbird'] }
+  let(:invalid_array_error_message) { "This field's type must be array." }
   let(:allow_nil_error_message) { "This field's type must be array." }
   let(:allow_empty_error_message) { 'This field cannot be empty.' }
 
@@ -100,6 +101,18 @@ RSpec.describe 'arr_field', type: :helper do
 
           expect_fail(cmd)
           expect_eq(get_field_error(cmd), allow_empty_error_message)
+        end
+      end
+    end
+
+    describe 'check value' do
+      context 'value is not arr' do
+        it 'should BE PREVENTED' do
+          params = { books: 'invalid_array' }
+          cmd = validator.call(params: params)
+
+          expect_fail(cmd)
+          expect_eq(get_field_error(cmd), invalid_array_error_message)
         end
       end
     end

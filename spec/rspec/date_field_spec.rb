@@ -82,7 +82,7 @@ RSpec.describe 'date_field', type: :helper do
     end
 
     describe 'check value' do
-      context 'value is not a valid date format' do
+      context 'value is not valid date format' do
         it 'should BE PREVENTED' do
           params = { birth_day: '2020-13-01' }
           cmd = validator.call(params: params)

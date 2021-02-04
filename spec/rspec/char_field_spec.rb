@@ -11,6 +11,7 @@ RSpec.describe 'char_field', type: :helper do
 
   let(:valid_value) { 'valid_char' }
   let(:allow_nil_error_message) { "This field's type must be string." }
+  let(:invalid_char_error_message) { "This field's type must be string." }
   let(:char_length_error_message) { 'Invalid char length.' }
 
   def get_field_error(cmd)
@@ -164,6 +165,18 @@ RSpec.describe 'char_field', type: :helper do
 
           expect_fail(cmd)
           expect_eq(get_field_error(cmd), allow_nil_error_message)
+        end
+      end
+    end
+
+    describe 'check value' do
+      context 'value is not char' do
+        it 'should BE PREVENTED' do
+          params = { name: 1 }
+          cmd = validator.call(params: params)
+
+          expect_fail(cmd)
+          expect_eq(get_field_error(cmd), invalid_char_error_message)
         end
       end
     end
