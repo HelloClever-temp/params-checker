@@ -111,6 +111,8 @@ RSpec.describe 'int_field', type: :helper do
           params = {}
           cmd = validator.call(params: params)
 
+          expect_fail(cmd)
+          expect_eq(get_field_error(cmd), required_error_message)
           expect_eq(cmd.result, {})
         end
       end

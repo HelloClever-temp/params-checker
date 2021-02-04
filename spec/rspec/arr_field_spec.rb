@@ -59,7 +59,7 @@ RSpec.describe 'arr_field', type: :helper do
         it 'should BE PREVENTED' do
           params = {}
           cmd = validator.call(params: params)
-
+          # binding.pry
           expect_fail(cmd)
           expect_eq(get_field_error(cmd), required_error_message)
         end
@@ -72,6 +72,8 @@ RSpec.describe 'arr_field', type: :helper do
           params = {}
           cmd = validator.call(params: params)
 
+          expect_fail(cmd)
+          expect_eq(get_field_error(cmd), required_error_message)
           expect_eq(cmd.result, {})
         end
       end

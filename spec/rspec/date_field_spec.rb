@@ -1,50 +1,23 @@
 require 'rails_helper'
-require 'validators/num_field'
+require 'validators/date_field'
 require 'shared_contexts/base'
 require 'helper/base'
-# require 'helper/int_field'
 
 # rubocop:disable Metricts/BlockLength
-RSpec.describe 'num_field', type: :helper do
+RSpec.describe 'date_field', type: :helper do
   include_context 'error_messages'
 
-  let(:allow_nil_error_message) { "This field's type must be numeric." }
+  let(:allow_nil_error_message) { "Invalid date." }
 
   def get_field_error(cmd)
-    R_.get(cmd.errors, 'errors[0].field_errors.age')
-  end
-
-  def get_value_error_message(min: -2_000_000_000, max: 2_000_000_000)
-    "This numeric field's value must be in range from #{min} to #{max}."
+    R_.get(cmd.errors, 'errors[0].field_errors.birth_day')
   end
 
   describe 'check param_checker arguments' do
     describe 'check type' do
-      describe 'check min' do
-        context 'type is not num' do
-          let(:validator) { NumField::InvalidMinTypeValidator }
-
-          it 'should RAISE ERROR' do
-            expect_raise(validator)
-            expect_raise_message(validator, numeric_argument_error_message)
-          end
-        end
-      end
-
-      describe 'check max' do
-        context 'type is not num' do
-          let(:validator) { NumField::InvalidMaxTypeValidator }
-
-          it 'should RAISE ERROR' do
-            expect_raise(validator)
-            expect_raise_message(validator, numeric_argument_error_message)
-          end
-        end
-      end
-
       describe 'check required' do
         context 'type is not boolean' do
-          let(:validator) { NumField::InvalidRequiredTypeValidator }
+          let(:validator) { DateField::InvalidRequiredTypeValidator }
 
           it 'should RAISE ERROR' do
             expect_raise(validator)
@@ -55,7 +28,7 @@ RSpec.describe 'num_field', type: :helper do
 
       describe 'check allow_nil' do
         context 'type is not boolean' do
-          let(:validator) { NumField::InvalidAllowNilTypeValidator }
+          let(:validator) { DateField::InvalidAllowNilTypeValidator }
 
           it 'should RAISE ERROR' do
             expect_raise(validator)
@@ -64,34 +37,10 @@ RSpec.describe 'num_field', type: :helper do
         end
       end
     end
-
-    describe 'check value' do
-      describe 'check min' do
-        context 'value is invalid' do
-          let(:validator) { NumField::InvalidMinValueValidator }
-
-          it 'should RAISE ERROR' do
-            expect_raise(validator)
-            expect_raise_message(validator, num_length_error_message)
-          end
-        end
-      end
-
-      describe 'check max' do
-        context 'value is invalid' do
-          let(:validator) { NumField::InvalidMaxValueValidator }
-
-          it 'should RAISE ERROR' do
-            expect_raise(validator)
-            expect_raise_message(validator, num_length_error_message)
-          end
-        end
-      end
-    end
   end
 
   describe 'check default param_checker' do
-    let(:validator) { NumField::DefaultValidator }
+    let(:validator) { DateField::DefaultValidator }
 
     describe 'check default required parameter' do
       context 'field is absent' do
@@ -107,7 +56,7 @@ RSpec.describe 'num_field', type: :helper do
 
     describe 'check default default value parameter' do
       context 'default value is not set' do
-        it 'value should NOT BE SET' do
+        it 'should BE PREVENTED & value should NOT BE SET' do
           params = {}
           cmd = validator.call(params: params)
 
@@ -118,38 +67,10 @@ RSpec.describe 'num_field', type: :helper do
       end
     end
 
-    describe 'check default min_value parameter' do
-      context 'field is too big' do
-        it 'should BE PREVENTED' do
-          params = {
-            age: -2_000_000_001
-          }
-          cmd = validator.call(params: params)
-
-          expect_fail(cmd)
-          expect_eq(get_field_error(cmd), get_value_error_message)
-        end
-      end
-    end
-
-    describe 'check default max_value parameter' do
-      context 'field is too big' do
-        it 'should BE PREVENTED' do
-          params = {
-            age: 2_000_000_001
-          }
-          cmd = validator.call(params: params)
-
-          expect_fail(cmd)
-          expect_eq(get_field_error(cmd), get_value_error_message)
-        end
-      end
-    end
-
     describe 'check default allow_nil parameter' do
       context 'field is nil' do
         it 'should BE PREVENTED' do
-          params = { age: nil }
+          params = { birth_day: nil }
           cmd = validator.call(params: params)
 
           expect_fail(cmd)
@@ -160,7 +81,7 @@ RSpec.describe 'num_field', type: :helper do
 
     context 'field is valid' do
       it 'should PASS' do
-        params = { age: 5.5 }
+        params = { birth_day: '2020-01-01' }
         cmd = validator.call(params: params)
 
         expect_success(cmd)
@@ -171,7 +92,7 @@ RSpec.describe 'num_field', type: :helper do
   describe 'check params' do
     describe 'check default value parameter' do
       context 'default value is absent' do
-        let(:validator) { NumField::DefaultValueIsAbsentValidator }
+        let(:validator) { DateField::DefaultValueIsAbsentValidator }
 
         context 'field is absent' do
           it 'should BE PREVENTED' do
@@ -185,32 +106,32 @@ RSpec.describe 'num_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { age: 5.5 }
+            params = { birth_day: '2020-01-01' }
             cmd = validator.call(params: params)
 
-            expect_eq(cmd.result, { age: 5.5 })
+            expect_eq(cmd.result, { birth_day: Date.parse('2020-01-01') })
           end
         end
       end
 
       context 'default value is present' do
-        let(:validator) { NumField::DefaultValueIsPresentValidator }
+        let(:validator) { DateField::DefaultValueIsPresentValidator }
 
         context 'field is absent' do
           it 'value should BE SET' do
             params = {}
             cmd = validator.call(params: params)
 
-            expect_eq(cmd.result, { age: 3 })
+            expect_eq(cmd.result, { birth_day: Date.parse('2021-01-02') })
           end
         end
 
         context 'field is present' do
           it 'value should NOT BE SET' do
-            params = { age: 5.5 }
+            params = { birth_day: '2020-01-01' }
             cmd = validator.call(params: params)
 
-            expect_eq(cmd.result, { age: 5.5 })
+            expect_eq(cmd.result, { birth_day: Date.parse('2020-01-01') })
           end
         end
       end
@@ -218,7 +139,7 @@ RSpec.describe 'num_field', type: :helper do
 
     describe 'check required parameter' do
       context 'required parameter is true' do
-        let(:validator) { NumField::RequiredValidator }
+        let(:validator) { DateField::RequiredValidator }
 
         context 'field is absent' do
           it 'should BE PREVENTED' do
@@ -232,7 +153,7 @@ RSpec.describe 'num_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { age: 5.5 }
+            params = { birth_day: '2020-01-01' }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -241,7 +162,7 @@ RSpec.describe 'num_field', type: :helper do
       end
 
       context 'required parameter is false' do
-        let(:validator) { NumField::NotRequiredValidator }
+        let(:validator) { DateField::NotRequiredValidator }
 
         context 'field is absent' do
           it 'should PASS' do
@@ -254,57 +175,7 @@ RSpec.describe 'num_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { age: 5.5 }
-            cmd = validator.call(params: params)
-
-            expect_success(cmd)
-          end
-        end
-      end
-    end
-
-    describe 'check min parameter' do
-      describe 'min is 10' do
-        let(:validator) { NumField::MinValidator }
-
-        context 'field is too small' do
-          it 'should BE PREVENTED' do
-            params = { age: 9.5 }
-            cmd = validator.call(params: params)
-
-            expect_fail(cmd)
-            expect_eq(get_field_error(cmd), get_value_error_message(min: 10.5))
-          end
-        end
-
-        context 'field is not too small' do
-          it 'should PASS' do
-            params = { age: 10.5 }
-            cmd = validator.call(params: params)
-
-            expect_success(cmd)
-          end
-        end
-      end
-    end
-
-    describe 'check max parameter' do
-      describe 'max is 9' do
-        let(:validator) { NumField::MaxValidator }
-
-        context 'field is too big' do
-          it 'should BE PREVENTED' do
-            params = { age: 10.5 }
-            cmd = validator.call(params: params)
-
-            expect_fail(cmd)
-            expect_eq(get_field_error(cmd), get_value_error_message(max: 9.5))
-          end
-        end
-
-        context 'field is not too big' do
-          it 'should PASS' do
-            params = { age: 9.5 }
+            params = { birth_day: '2020-01-01' }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -315,11 +186,11 @@ RSpec.describe 'num_field', type: :helper do
 
     describe 'check allow_nil parameter' do
       context 'allow_nil parameter is true' do
-        let(:validator) { NumField::AllowNilValidator }
+        let(:validator) { DateField::AllowNilValidator }
 
         context 'field is nil' do
           it 'should PASS' do
-            params = { age: nil }
+            params = { birth_day: nil }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -328,7 +199,7 @@ RSpec.describe 'num_field', type: :helper do
 
         context 'field is not nil' do
           it 'should PASS' do
-            params = { age: 5.5 }
+            params = { birth_day: '2020-01-01' }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -337,11 +208,11 @@ RSpec.describe 'num_field', type: :helper do
       end
 
       context 'allow_nil parameter is false' do
-        let(:validator) { NumField::NotAllowNilValidator }
+        let(:validator) { DateField::NotAllowNilValidator }
 
         context 'field is nil' do
           it 'should BE PREVENTED' do
-            params = { age: nil }
+            params = { birth_day: nil }
             cmd = validator.call(params: params)
 
             expect_fail(cmd)
@@ -351,7 +222,7 @@ RSpec.describe 'num_field', type: :helper do
 
         context 'field is not nil' do
           it 'should PASS' do
-            params = { age: 5.5 }
+            params = { birth_day: '2020-01-01' }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
