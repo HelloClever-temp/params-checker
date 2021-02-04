@@ -8,6 +8,7 @@ require 'helper/base'
 RSpec.describe 'int_field', type: :helper do
   include_context 'error_messages'
 
+  let(:valid_value) { 5 }
   let(:allow_nil_error_message) { "This field's type must be integer." }
 
   def get_field_error(cmd)
@@ -172,7 +173,7 @@ RSpec.describe 'int_field', type: :helper do
 
     context 'field is valid' do
       it 'should PASS' do
-        params = { age: 5 }
+        params = { age: valid_value }
         cmd = validator.call(params: params)
 
         expect_success(cmd)
@@ -197,10 +198,10 @@ RSpec.describe 'int_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { age: 5 }
+            params = { age: valid_value }
             cmd = validator.call(params: params)
 
-            expect_eq(cmd.result, { age: 5 })
+            expect_eq(cmd.result, { age: valid_value })
           end
         end
       end
@@ -219,10 +220,10 @@ RSpec.describe 'int_field', type: :helper do
 
         context 'field is present' do
           it 'value should NOT BE SET' do
-            params = { age: 5 }
+            params = { age: valid_value }
             cmd = validator.call(params: params)
 
-            expect_eq(cmd.result, { age: 5 })
+            expect_eq(cmd.result, { age: valid_value })
           end
         end
       end
@@ -244,7 +245,7 @@ RSpec.describe 'int_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { age: 5 }
+            params = { age: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -266,7 +267,7 @@ RSpec.describe 'int_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { age: 5 }
+            params = { age: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -340,7 +341,7 @@ RSpec.describe 'int_field', type: :helper do
 
         context 'field is not nil' do
           it 'should PASS' do
-            params = { age: 5 }
+            params = { age: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -363,7 +364,7 @@ RSpec.describe 'int_field', type: :helper do
 
         context 'field is not nil' do
           it 'should PASS' do
-            params = { age: 5 }
+            params = { age: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)

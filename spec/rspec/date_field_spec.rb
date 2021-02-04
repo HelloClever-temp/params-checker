@@ -7,6 +7,7 @@ require 'helper/base'
 RSpec.describe 'date_field', type: :helper do
   include_context 'error_messages'
 
+  let(:valid_value) { '2020-01-01' }
   let(:allow_nil_error_message) { 'Invalid date.' }
   let(:invalid_date_error_message) { 'Invalid date.' }
 
@@ -94,7 +95,7 @@ RSpec.describe 'date_field', type: :helper do
 
     context 'field is valid' do
       it 'should PASS' do
-        params = { birth_day: '2020-01-01' }
+        params = { birth_day: valid_value }
         cmd = validator.call(params: params)
 
         expect_success(cmd)
@@ -119,10 +120,10 @@ RSpec.describe 'date_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { birth_day: '2020-01-01' }
+            params = { birth_day: valid_value }
             cmd = validator.call(params: params)
 
-            expect_eq(cmd.result, { birth_day: Date.parse('2020-01-01') })
+            expect_eq(cmd.result, { birth_day: Date.parse(valid_value) })
           end
         end
       end
@@ -141,10 +142,10 @@ RSpec.describe 'date_field', type: :helper do
 
         context 'field is present' do
           it 'value should NOT BE SET' do
-            params = { birth_day: '2020-01-01' }
+            params = { birth_day: valid_value }
             cmd = validator.call(params: params)
 
-            expect_eq(cmd.result, { birth_day: Date.parse('2020-01-01') })
+            expect_eq(cmd.result, { birth_day: Date.parse(valid_value) })
           end
         end
       end
@@ -166,7 +167,7 @@ RSpec.describe 'date_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { birth_day: '2020-01-01' }
+            params = { birth_day: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -188,7 +189,7 @@ RSpec.describe 'date_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { birth_day: '2020-01-01' }
+            params = { birth_day: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -212,7 +213,7 @@ RSpec.describe 'date_field', type: :helper do
 
         context 'field is not nil' do
           it 'should PASS' do
-            params = { birth_day: '2020-01-01' }
+            params = { birth_day: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -235,7 +236,7 @@ RSpec.describe 'date_field', type: :helper do
 
         context 'field is not nil' do
           it 'should PASS' do
-            params = { birth_day: '2020-01-01' }
+            params = { birth_day: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)

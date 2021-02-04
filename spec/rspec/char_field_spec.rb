@@ -9,6 +9,7 @@ require 'helper/base'
 RSpec.describe 'char_field', type: :helper do
   include_context 'error_messages'
 
+  let(:valid_value) { 'valid_char' }
   let(:allow_nil_error_message) { "This field's type must be string." }
   let(:char_length_error_message) { 'Invalid char length.' }
 
@@ -169,7 +170,7 @@ RSpec.describe 'char_field', type: :helper do
 
     context 'field is valid' do
       it 'should PASS' do
-        params = { name: 'valid_char' }
+        params = { name: valid_value }
         cmd = validator.call(params: params)
 
         expect_success(cmd)
@@ -194,10 +195,10 @@ RSpec.describe 'char_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { name: 'valid_char' }
+            params = { name: valid_value }
             cmd = validator.call(params: params)
 
-            expect_eq(cmd.result, { name: 'valid_char' })
+            expect_eq(cmd.result, { name: valid_value })
           end
         end
       end
@@ -216,10 +217,10 @@ RSpec.describe 'char_field', type: :helper do
 
         context 'field is present' do
           it 'value should NOT BE SET' do
-            params = { name: 'valid_char' }
+            params = { name: valid_value }
             cmd = validator.call(params: params)
 
-            expect_eq(cmd.result, { name: 'valid_char' })
+            expect_eq(cmd.result, { name: valid_value })
           end
         end
       end
@@ -241,7 +242,7 @@ RSpec.describe 'char_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { name: 'present_char' }
+            params = { name: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -263,7 +264,7 @@ RSpec.describe 'char_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { name: 'present_char' }
+            params = { name: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -287,7 +288,7 @@ RSpec.describe 'char_field', type: :helper do
 
         context 'field is not blank' do
           it 'should PASS' do
-            params = { name: 'not_blank_char' }
+            params = { name: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -310,7 +311,7 @@ RSpec.describe 'char_field', type: :helper do
 
         context 'field is not blank' do
           it 'should PASS' do
-            params = { name: 'not_blank_char' }
+            params = { name: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -384,7 +385,7 @@ RSpec.describe 'char_field', type: :helper do
 
         context 'field is not nil' do
           it 'should PASS' do
-            params = { name: 'not_nil_char' }
+            params = { name: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -407,7 +408,7 @@ RSpec.describe 'char_field', type: :helper do
 
         context 'field is not nil' do
           it 'should PASS' do
-            params = { name: 'not_nil_char' }
+            params = { name: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)

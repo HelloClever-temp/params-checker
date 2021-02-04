@@ -7,6 +7,7 @@ require 'helper/base'
 RSpec.describe 'date_time_field', type: :helper do
   include_context 'error_messages'
 
+  let(:valid_value) { '2020-13-01 04:05:05' }
   let(:allow_nil_error_message) { 'Invalid datetime.' }
   let(:invalid_datetime_error_message) { 'Invalid datetime.' }
 
@@ -83,7 +84,7 @@ RSpec.describe 'date_time_field', type: :helper do
     describe 'check value' do
       context 'value is not a valid datetime format' do
         it 'should BE PREVENTED' do
-          params = { created_at: '2020-13-01 04:05:05' }
+          params = { created_at: valid_value }
           cmd = validator.call(params: params)
 
           expect_fail(cmd)

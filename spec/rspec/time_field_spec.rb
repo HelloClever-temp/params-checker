@@ -7,8 +7,9 @@ require 'helper/base'
 RSpec.describe 'time_field', type: :helper do
   include_context 'error_messages'
 
+  let(:valid_value) { '11:00' }
   let(:allow_nil_error_message) { 'Invalid time.' }
-  let(:invalid_date_error_message) { 'Invalid time.' }
+  let(:invalid_time_error_message) { 'Invalid time.' }
 
   def get_field_error(cmd)
     R_.get(cmd.errors, 'errors[0].field_errors.created_at')
@@ -87,14 +88,14 @@ RSpec.describe 'time_field', type: :helper do
           cmd = validator.call(params: params)
 
           expect_fail(cmd)
-          expect_eq(get_field_error(cmd), invalid_date_error_message)
+          expect_eq(get_field_error(cmd), invalid_time_error_message)
         end
       end
     end
 
     context 'field is valid' do
       it 'should PASS' do
-        params = { created_at: '11:00' }
+        params = { created_at: valid_value }
         cmd = validator.call(params: params)
 
         expect_success(cmd)
@@ -119,10 +120,10 @@ RSpec.describe 'time_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { created_at: '11:00' }
+            params = { created_at: valid_value }
             cmd = validator.call(params: params)
 
-            expect_eq(cmd.result, { created_at: Time.parse('11:00') })
+            expect_eq(cmd.result, { created_at: Time.parse(valid_value) })
           end
         end
       end
@@ -141,10 +142,10 @@ RSpec.describe 'time_field', type: :helper do
 
         context 'field is present' do
           it 'value should NOT BE SET' do
-            params = { created_at: '11:00' }
+            params = { created_at: valid_value }
             cmd = validator.call(params: params)
 
-            expect_eq(cmd.result, { created_at: Time.parse('11:00') })
+            expect_eq(cmd.result, { created_at: Time.parse(valid_value) })
           end
         end
       end
@@ -166,7 +167,7 @@ RSpec.describe 'time_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { created_at: '11:00' }
+            params = { created_at: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -188,7 +189,7 @@ RSpec.describe 'time_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { created_at: '11:00' }
+            params = { created_at: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -212,7 +213,7 @@ RSpec.describe 'time_field', type: :helper do
 
         context 'field is not nil' do
           it 'should PASS' do
-            params = { created_at: '11:00' }
+            params = { created_at: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -235,7 +236,7 @@ RSpec.describe 'time_field', type: :helper do
 
         context 'field is not nil' do
           it 'should PASS' do
-            params = { created_at: '11:00' }
+            params = { created_at: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)

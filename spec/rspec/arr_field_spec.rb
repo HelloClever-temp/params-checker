@@ -7,6 +7,7 @@ require 'helper/base'
 RSpec.describe 'arr_field', type: :helper do
   include_context 'error_messages'
 
+  let(:valid_value) { ['To kill a Mockingbird'] }
   let(:allow_nil_error_message) { "This field's type must be array." }
   let(:allow_empty_error_message) { 'This field cannot be empty.' }
 
@@ -105,7 +106,7 @@ RSpec.describe 'arr_field', type: :helper do
 
     context 'field is valid' do
       it 'should PASS' do
-        params = { books: ['To kill a Mockingbird'] }
+        params = { books: valid_value }
         cmd = validator.call(params: params)
 
         expect_success(cmd)
@@ -130,10 +131,10 @@ RSpec.describe 'arr_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { books: ['To kill a Mockingbird'] }
+            params = { books: valid_value }
             cmd = validator.call(params: params)
 
-            expect_eq(cmd.result, { books: ['To kill a Mockingbird'] })
+            expect_eq(cmd.result, { books: valid_value })
           end
         end
       end
@@ -152,10 +153,10 @@ RSpec.describe 'arr_field', type: :helper do
 
         context 'field is present' do
           it 'value should NOT BE SET' do
-            params = { books: ['To kill a Mockingbird'] }
+            params = { books: valid_value }
             cmd = validator.call(params: params)
 
-            expect_eq(cmd.result, { books: ['To kill a Mockingbird'] })
+            expect_eq(cmd.result, { books: valid_value })
           end
         end
       end
@@ -177,7 +178,7 @@ RSpec.describe 'arr_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { books: ['To kill a Mockingbird'] }
+            params = { books: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -199,7 +200,7 @@ RSpec.describe 'arr_field', type: :helper do
 
         context 'field is present' do
           it 'should PASS' do
-            params = { books: ['To kill a Mockingbird'] }
+            params = { books: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -223,7 +224,7 @@ RSpec.describe 'arr_field', type: :helper do
 
         context 'field is not nil' do
           it 'should PASS' do
-            params = { books: ['To kill a Mockingbird'] }
+            params = { books: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -246,7 +247,7 @@ RSpec.describe 'arr_field', type: :helper do
 
         context 'field is not nil' do
           it 'should PASS' do
-            params = { books: ['To kill a Mockingbird'] }
+            params = { books: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -270,7 +271,7 @@ RSpec.describe 'arr_field', type: :helper do
 
         context 'field is not empty' do
           it 'should PASS' do
-            params = { books: ['To kill a Mockingbird'] }
+            params = { books: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
@@ -293,7 +294,7 @@ RSpec.describe 'arr_field', type: :helper do
 
         context 'field is not empty' do
           it 'should PASS' do
-            params = { books: ['To kill a Mockingbird'] }
+            params = { books: valid_value }
             cmd = validator.call(params: params)
 
             expect_success(cmd)
