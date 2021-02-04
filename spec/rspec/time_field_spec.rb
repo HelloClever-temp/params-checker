@@ -7,7 +7,8 @@ require 'helper/base'
 RSpec.describe 'time_field', type: :helper do
   include_context 'error_messages'
 
-  let(:allow_nil_error_message) { "Invalid time." }
+  let(:allow_nil_error_message) { 'Invalid time.' }
+  let(:invalid_date_error_message) { 'Invalid time.' }
 
   def get_field_error(cmd)
     R_.get(cmd.errors, 'errors[0].field_errors.created_at')
@@ -75,6 +76,18 @@ RSpec.describe 'time_field', type: :helper do
 
           expect_fail(cmd)
           expect_eq(get_field_error(cmd), allow_nil_error_message)
+        end
+      end
+    end
+
+    describe 'check value' do
+      context 'value is not a valid time format' do
+        it 'should BE PREVENTED' do
+          params = { created_at: '25:00' }
+          cmd = validator.call(params: params)
+
+          expect_fail(cmd)
+          expect_eq(get_field_error(cmd), invalid_date_error_message)
         end
       end
     end
