@@ -2,8 +2,10 @@
 
 module ParamsChecker
   class FieldError < StandardError
-    def initialize(message)
-      super(message)
+    attr_accessor :data
+
+    def initialize(data)
+      @data = data
     end
   end
 end

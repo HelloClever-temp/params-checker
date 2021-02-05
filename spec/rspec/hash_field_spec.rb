@@ -18,11 +18,11 @@ RSpec.describe 'hash_field', type: :helper do
   describe 'check param_checker arguments' do
     describe 'check type' do
       describe 'check required' do
-        context 'type is not hash' do
+        context 'type is not boolean' do
           let(:validator) { HashField::InvalidRequiredTypeValidator }
 
           it 'should RAISE ERROR' do
-            # binding.pry
+
             expect_raise(validator)
             expect_raise_message(validator, boolean_argument_error_message)
           end
@@ -30,7 +30,7 @@ RSpec.describe 'hash_field', type: :helper do
       end
 
       describe 'check allow_nil' do
-        context 'type is not hash' do
+        context 'type is not boolean' do
           let(:validator) { HashField::InvalidAllowNilTypeValidator }
 
           it 'should RAISE ERROR' do
@@ -75,7 +75,7 @@ RSpec.describe 'hash_field', type: :helper do
         it 'should BE PREVENTED' do
           params = { person: nil }
           cmd = validator.call(params: params)
-          # binding.pry
+
           expect_fail(cmd)
           expect_eq(get_field_error(cmd), allow_nil_error_message)
         end

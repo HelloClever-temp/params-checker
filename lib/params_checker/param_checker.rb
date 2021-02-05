@@ -166,7 +166,8 @@ module ParamsChecker
       end
 
       def add_nested_hash_error(message = '')
-        errors.add(key, message[0][:errors][0][:field_errors])
+        # binding.pry
+        errors.add(key, message[:errors][0][:field_errors])
       end
 
       def add_field_error(message = '')

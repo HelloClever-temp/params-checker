@@ -16,14 +16,16 @@ module ParamsChecker
       @custom_check_errors = {}
     end
 
-    def self.init(required: true, many: false)
-      raise "This field's type must be hash." if [required, many].any? { |value| !value.in? [true, false] }
+    def self.init(required: true, many: false, default: nil, allow_nil: false)
+      raise "This field's type must be boolean." if [required, many, allow_nil].any? { |value| !value.in? [true, false] }
 
       type = many ? 'nested_hashs' : 'nested_hash'
 
       {
         type: type,
         required: required,
+        default: default,
+        allow_nil: allow_nil,
         many: many,
         class: self
       }
@@ -33,9 +35,11 @@ module ParamsChecker
       raise GeneralError.new(message)
     end
 
-    def add_error(message)
-      # TODO: add second parameter to add_error(:code, 'invalid code')
-      raise FieldError.new(message)
+    def add_error(message, key = nil)
+      raise ParamsChecker::FieldError.new({
+        message: message,
+        key: key,
+      })
     end
 
     def call
@@ -43,8 +47,6 @@ module ParamsChecker
       error_exist? && add_errors
       formatted_params
     rescue ParamsChecker::GeneralError => e
-      p "========>GeneralError : ", e
-
       # if is the outest hash, add error
       # if is not, keep raising error, bubble up to the outest hash,
       # then the outest hash will add error
@@ -55,7 +57,7 @@ module ParamsChecker
       errors.add(
         :errors,
         {
-          message: e,
+          message: e.message,
           error_type: 'general_error'
         }
       )
@@ -80,8 +82,12 @@ module ParamsChecker
     end
 
     def all_fields_of_params_are_valid?
-      @all_fields_of_params_are_valid ||=
-        schema.all? do |key, _|
+      @all_fields_of_params_are_valid ||= field_valids.all?(true)
+    end
+
+    def field_valids
+      @field_valids ||=
+        schema.map do |key, _|
           set_default_value(key) if need_to_set_default_value?(key)
 
           field_is_valid?(key)
@@ -171,7 +177,7 @@ module ParamsChecker
 
     def fields_check
       @formatted_params_after_custom_fields_check = formatted_params_after_default_fields_check
-      schema.each do |key, value|
+      schema.each do |key, _|
         # next unless self.methods.grep(/check_#{key}/).length > 0
         need_to_check = "check_#{key}".to_sym.in?(methods)
         passed_default_check = errors[key].nil?
@@ -185,6 +191,7 @@ module ParamsChecker
     def field_check(key)
       check_method = "check_#{key}"
       total_parameters = method(check_method).arity
+      # pp "========>total_parameters : ", total_parameters
 
       value = if total_parameters == 1
                 # like check_name(name)
@@ -196,11 +203,16 @@ module ParamsChecker
 
       @formatted_params_after_custom_fields_check[key] = value
     rescue ParamsChecker::FieldError => e
-      @custom_check_errors[key] = e
+      # binding.pry
+      key = e.data[:key].presence || key
+      @custom_check_errors[key] = e.data[:message]
     end
 
     def overall_check
       @formatted_params_after_custom_overall_check = check(formatted_params_after_custom_fields_check)
+    rescue ParamsChecker::FieldError => e
+      key = e.data[:key]
+      @custom_check_errors[key] = e.data[:message]
     end
 
     def init
@@ -247,7 +259,7 @@ module ParamsChecker
                   :formatted_params_after_custom_fields_check,
                   :formatted_params_after_custom_overall_check,
                   :is_outest_hash,
-                  :message,
+                  # :message,
                   :custom_check_errors
   end
 end

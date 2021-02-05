@@ -97,7 +97,7 @@ RSpec.describe 'date_time_field', type: :helper do
       it 'should PASS' do
         params = { created_at: '2020-01-01 04:05:05' }
         cmd = validator.call(params: params)
-        # binding.pry
+
         expect_success(cmd)
       end
     end

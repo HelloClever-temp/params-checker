@@ -74,7 +74,7 @@ RSpec.describe 'boolean_field', type: :helper do
         it 'should BE PREVENTED' do
           params = { active: nil }
           cmd = validator.call(params: params)
-          # binding.pry
+
           expect_fail(cmd)
           expect_eq(get_field_error(cmd), allow_nil_error_message)
         end
