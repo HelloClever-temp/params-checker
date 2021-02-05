@@ -524,6 +524,32 @@ RSpec.describe 'nested_hash_field', type: :helper do
   end
 
   describe 'check custom validator' do
+    describe 'format value and return' do
+      let(:validator) { NestedHashField::CheckAndFormatFieldsValidator }
+
+      context 'all fields is invalid' do
+        it 'should raise general_error error' do
+          params = {
+            name: 'Ted Nguyen',
+            age: 15,
+            email: 'ted@rexy.tech'
+          }
+          cmd = validator.call(params: params)
+
+          expect_success(cmd)
+
+          expect_eq(
+            cmd.result,
+            {
+              name: 'Ted Nguyen Teddy',
+              age: 37,
+              email: 'ted+11@rexy.tech'
+            }
+          )
+        end
+      end
+    end
+
     describe 'check raise_error' do
       let(:validator) { NestedHashField::RaiseErrorValidator }
 

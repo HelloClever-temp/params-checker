@@ -225,6 +225,30 @@ module NestedHashField
     end
   end
 
+  class CheckAndFormatFieldsValidator < ParamsChecker::BaseParamsChecker
+    def init
+      {
+        name: char_field,
+        age: int_field,
+        email: char_field
+      }
+    end
+
+    def check_name(name)
+      name + ' Teddy'
+    end
+
+    def check_age(age)
+      age + 22
+    end
+
+    def check(opts)
+      opts[:email] = 'ted+11@rexy.tech'
+
+      opts
+    end
+  end
+
   class AddErrorValidator < ParamsChecker::BaseParamsChecker
     def init
       {
