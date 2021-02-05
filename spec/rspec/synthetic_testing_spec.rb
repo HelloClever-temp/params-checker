@@ -558,7 +558,6 @@ RSpec.describe 'synthetic_testing', type: :helper do
             }
           }
           cmd = validator.call(params: params)
-          # binding.pry
           expect_success(cmd)
         end
       end
@@ -589,7 +588,6 @@ RSpec.describe 'synthetic_testing', type: :helper do
             }
           }
           cmd = validator.call(params: params)
-          # binding.pry
           expect_success(cmd)
         end
       end

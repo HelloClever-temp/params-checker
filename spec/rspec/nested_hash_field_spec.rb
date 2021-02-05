@@ -204,7 +204,6 @@ RSpec.describe 'nested_hash_field', type: :helper do
               }
             }
             cmd = validator.call(params: params)
-            # binding.pry
             expect_fail(cmd)
             expect_eq(R_.get(cmd.errors,
                              person2_error_path), required_error_message)
@@ -529,7 +528,7 @@ RSpec.describe 'nested_hash_field', type: :helper do
       let(:validator) { NestedHashField::RaiseErrorValidator }
 
       context 'all fields is invalid' do
-        it 'should BE PREVENTED' do
+        it 'should raise general_error error' do
           params = {
             name: 'Ted Nguyen',
             age: 15,
@@ -537,8 +536,6 @@ RSpec.describe 'nested_hash_field', type: :helper do
           }
           cmd = validator.call(params: params)
 
-          # pp "========>cmd.errors : ", cmd.errors
-          # binding.pry
           expect_fail(cmd)
           expect_eq(
             cmd.errors,
@@ -557,7 +554,7 @@ RSpec.describe 'nested_hash_field', type: :helper do
       let(:validator) { NestedHashField::AddErrorValidator }
 
       context 'all fields is invalid' do
-        it 'should BE PREVENTED' do
+        it 'should raise fields_errors error' do
           params = {
             name: 'Ted Nguyen',
             age: 15,
@@ -565,8 +562,6 @@ RSpec.describe 'nested_hash_field', type: :helper do
           }
           cmd = validator.call(params: params)
 
-          # pp "========>cmd.errors : ", cmd.errors
-          # binding.pry
           expect_fail(cmd)
           expect_eq(
             cmd.errors,
@@ -590,7 +585,7 @@ RSpec.describe 'nested_hash_field', type: :helper do
       let(:validator) { NestedHashField::RaiseErrorAndAddErrorValidator }
 
       context 'all fields is invalid' do
-        it 'should BE PREVENTED' do
+        it 'should raise general_error error' do
           params = {
             name: 'Ted Nguyen',
             age: 15,

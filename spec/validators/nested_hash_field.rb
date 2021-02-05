@@ -240,8 +240,8 @@ module NestedHashField
       name
     end
 
-    def check_age(age)
-      add_error('You must be older than 18 years old.', :age) if age < 18
+    def check_age(age, opts)
+      add_error('You must be older than 18 years old.') if age < 18 && opts[:name] == 'Ted Nguyen'
 
       name
     end
@@ -268,8 +268,8 @@ module NestedHashField
       name
     end
 
-    def check_age(age)
-      raise_error('You must be older than 18 years old.') if age < 18
+    def check_age(age, opts)
+      raise_error('You must be older than 18 years old.') if age < 18 && opts[:name] == 'Ted Nguyen'
 
       name
     end
@@ -296,8 +296,8 @@ module NestedHashField
       name
     end
 
-    def check_age(age)
-      add_error('You must be older than 18 years old.') if age < 18
+    def check_age(age, opts)
+      add_error('You must be older than 18 years old.') if age < 18 && opts[:name] == 'Ted Nguyen'
 
       name
     end

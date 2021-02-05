@@ -203,7 +203,6 @@ module ParamsChecker
 
       @formatted_params_after_custom_fields_check[key] = value
     rescue ParamsChecker::FieldError => e
-      # binding.pry
       key = e.data[:key].presence || key
       @custom_check_errors[key] = e.data[:message]
     end
