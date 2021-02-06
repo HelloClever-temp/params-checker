@@ -279,7 +279,11 @@ module ParamsChecker
       def call
         return nil if schema[key][:allow_nil] && params[key].nil?
 
-        check_type && params[key]
+        check_type && formatted_boolean
+      end
+
+      def formatted_boolean
+        [false, "false", "1"].exclude?(opts[:key])
       end
 
       def check_type
