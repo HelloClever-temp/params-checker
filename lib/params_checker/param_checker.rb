@@ -283,7 +283,7 @@ module ParamsChecker
       end
 
       def formatted_boolean
-        [false, "false", "1"].exclude?(opts[:key])
+        [false, "false", "1"].exclude?(opts[key])
       end
 
       def check_type
