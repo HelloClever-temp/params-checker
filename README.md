@@ -1,9 +1,14 @@
 # ParamsChecker
-Short description and motivation.
-
-## Usage
-How to use my plugin.
-
+### Table of Content
+- [Introdutions](#introdutions)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Advanced Usage](#advanced_usage)
+- [Contributing](#contributing)
+- [License](#license)
+## Introdutions
+- This library is inspired by Django REST framework's validation module.
+- 
 ## Installation
 Add this line to your application's Gemfile:
 
@@ -20,6 +25,13 @@ Or install it yourself as:
 ```bash
 $ gem 'params_checker', git: 'git@gitlab.com:rexylab/params-checker.git', branch: 'development'
 ```
+## Usage
+## Advanced Usage
+## Details
+- Params Checker has total 16 types of schema fields: 
+
+## Incoming features
+## Incoming features
 
 ## Contributing
 Contribution directions go here.

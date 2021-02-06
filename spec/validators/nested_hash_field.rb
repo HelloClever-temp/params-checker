@@ -306,7 +306,7 @@ module NestedHashField
   end
 
   class RaiseErrorAndAddErrorValidator < ParamsChecker::BaseParamsChecker
-    def init
+    def schema
       {
         name: char_field,
         age: int_field,
@@ -332,5 +332,4 @@ module NestedHashField
       opts
     end
   end
-
 end
