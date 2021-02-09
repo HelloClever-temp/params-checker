@@ -1097,11 +1097,11 @@ cmd.errors
   - description: to limit minimum value that the params can pass.
   - applicable schema fields:
     - int_field:
-      - default value: 0
+      - default value: 2_000_000_000
       - acceptable argument value: from -2_000_000_000 to 2_000_000_000
       - type: integer
     - bigint_field:
-      - default value: 0
+      - default value: 2_000_000_000_000
       - acceptable argument value: from -2_000_000_000_000 to 2_000_000_000_000
       - type: integer
     - positive_int_field:
@@ -1113,11 +1113,11 @@ cmd.errors
       - acceptable argument value: from 0 to 2_000_000_000_000
       - type: integer
     - num_field:
-      - default value: 0
+      - default value: 2_000_000_000
       - acceptable argument value: from -2_000_000_000 to 2_000_000_000
       - type: integer, decimal
     - bignum_field:
-      - default value: 0
+      - default value: 2_000_000_000_000
       - acceptable argument value: from -2_000_000_000_000 to 2_000_000_000_000
       - type: integer, decimal
     - positive_num_field:
@@ -1142,35 +1142,35 @@ cmd.errors
   - description: to limit maximum value that the params can pass.
   - applicable schema fields:
     - int_field:
-      - default value: 0
+      - default value: 2_000_000_000
       - acceptable argument value: from -2_000_000_000 to 2_000_000_000
       - type: integer
     - bigint_field:
-      - default value: 0
+      - default value: 2_000_000_000_000
       - acceptable argument value: from -2_000_000_000_000 to 2_000_000_000_000
       - type: integer
     - positive_int_field:
-      - default value: 0
+      - default value: 2_000_000_000
       - acceptable argument value: from 0 to 2_000_000_000
       - type: integer
     - positive_bigint_field:
-      - default value: 0
+      - default value: 2_000_000_000_000
       - acceptable argument value: from 0 to 2_000_000_000_000
       - type: integer
     - num_field:
-      - default value: 0
+      - default value: 2_000_000_000
       - acceptable argument value: from -2_000_000_000 to 2_000_000_000
       - type: integer, decimal
     - bignum_field:
-      - default value: 0
+      - default value: 2_000_000_000_000
       - acceptable argument value: from -2_000_000_000_000 to 2_000_000_000_000
       - type: integer, decimal
     - positive_num_field:
-      - default value: 0
+      - default value: 2_000_000_000
       - acceptable argument value: from 0 to 2_000_000_000
       - type: integer, decimal
     - positive_bignum_field:
-      - default value: 0
+      - default value: 2_000_000_000_000
       - acceptable argument value: from 0 to 2_000_000_000_000
       - type: integer, decimal
   - example:
