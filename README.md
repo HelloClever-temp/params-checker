@@ -894,6 +894,7 @@ cmd.errors
 ## Api Details
 ### 1. Available schema fields:
   - text_field
+    - [required](#required)
     - [default](#default)
     - [allow_blank](#allow_blank)
     - [min_length](#min_length)
