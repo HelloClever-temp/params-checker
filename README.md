@@ -2,7 +2,7 @@
 ### Table of Content
 - [Introducion](#introduction)
 - [Installation](#installation)
-- [Quickstart](#usage_example)
+- [Quickstart](#quickstart)
 - [Usage](#usage)
   - [1. How a Params Checker command behave](#1-how-a-params-checker-command-behave)
   - [2. Schema fields](#2-schema-fields)
@@ -13,8 +13,8 @@
   - [1. Basic usage](#1-basic-usage)
   - [2. Advanced usage](#2-advanced-usage)
 - [Api Details](#api-details)
-  - [1. Available schema fields and their arguments](#1-available-schema-fields-and-their-arguments)
-  - [2. Available schema fields's parameters](#2-available-schema-fieldss-parameters)
+  - [1. Available schema fields](#1-available-schema-fields)
+  - [2. Available schema fields's arguments](#2-available-schema-fieldss-arguments)
 - [Incoming features](#incoming-features)
 - [Contributing](#contributing)
 - [License](#license)
@@ -82,7 +82,8 @@ class BasicUsageValidator < ParamsChecker::BaseParamsChecker
   end
 end
 ```
-- Or if you want more conditional validation, you can pass arguments like this. For more detail, please read [here](#2-available-schema-fields).
+- Or if you want more conditional validation, you can pass arguments like this. For more detail, please read [here](#1-available-schema-fields).
+
 ```ruby
 
 class BasicUsageValidator < ParamsChecker::BaseParamsChecker
@@ -170,7 +171,7 @@ end
   - For more examples, read [here](#1-basic-usage).
 
 ### 2. Schema fields:
-  - At the time of writing this document, Params Checker supports 16 kinds of data type checking(we call these "schema fields"). Read details about these schema fields [here](#1-available-schema-fields-and-their-arguments).
+  - At the time of writing this document, Params Checker supports 16 kinds of data type checking(we call these "schema fields"). Read details about these schema fields [here](#1-available-schema-fields).
   - You can modify a schema field's arguments to tell ParamsChecker how you want to validate that specific field.
     - Example:
       ```ruby
@@ -183,7 +184,7 @@ end
         end
       end
       ```
-    - For more examples, read [here](#1-custom-schema-fieldss-parameters).
+    - For more examples, read [here](#1-custom-schema-fieldss-arguments).
 
 ### 3. Error types
 - Currently ParamsChecker have 2 error types
@@ -672,7 +673,7 @@ cmd.errors
 
 ```
 ### 2. Advance usage
-##### 1. Custom schema fields's parameters
+##### 1. Custom schema fields's arguments
 
 ```ruby
 class AdvancedUsageValidator < ParamsChecker::BaseParamsChecker
@@ -891,7 +892,7 @@ cmd.errors
 ```
 
 ## Api Details
-### 1. Available schema fields and their arguments:
+### 1. Available schema fields:
   - text_field
     - [default](#default)
     - [allow_blank](#allow_blank)
@@ -979,7 +980,7 @@ cmd.errors
     - [default](#default)
     - [allow_nil](#allow_nil)
 
-### 2. Available schema fields's parameters:
+### 2. Available schema fields's arguments:
 ##### required
 
   - description: to indicate that if you need to validate field's presence or not.
