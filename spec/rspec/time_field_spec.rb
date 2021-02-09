@@ -12,7 +12,7 @@ RSpec.describe 'time_field', type: :helper do
   let(:invalid_time_error_message) { 'Invalid time.' }
 
   def get_field_error(cmd)
-    R_.get(cmd.errors, 'errors[0].field_errors.created_at')
+    R_.get(cmd.errors, 'errors.field_errors.created_at')
   end
 
   describe 'check param_checker arguments' do

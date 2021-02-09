@@ -17,17 +17,17 @@ RSpec.describe 'nested_hash_field', type: :helper do
   let(:invalid_boolean_error_message) { "This field's type must be boolean." }
   let(:invalid_date_error_message) { 'Invalid date.' }
 
-  let(:person_error_path) { 'errors[0].field_errors.person' }
+  let(:person_error_path) { 'errors.field_errors.person' }
   let(:age_error_path) { "#{person_error_path}.age" }
   let(:name_error_path) { "#{person_error_path}.name" }
 
-  let(:person1_error_path) { 'errors[0].field_errors.person1' }
-  let(:person2_error_path) { 'errors[0].field_errors.person1.person2' }
+  let(:person1_error_path) { 'errors.field_errors.person1' }
+  let(:person2_error_path) { 'errors.field_errors.person1.person2' }
   let(:is_male_error_path) { "#{person2_error_path}.is_male" }
   let(:birth_day_error_path) { "#{person2_error_path}.birth_day" }
 
   def get_field_error(cmd)
-    R_.get(cmd.errors, 'errors[0].field_errors.person')
+    R_.get(cmd.errors, 'errors.field_errors.person')
   end
 
   describe 'check param_checker arguments' do
@@ -165,7 +165,7 @@ RSpec.describe 'nested_hash_field', type: :helper do
           it 'should BE PREVENTED' do
             params = { person: { name: 333, age: 3 } }
             cmd = validator.call(params: params)
-
+            # binding.pry
             expect_fail(cmd)
             expect_eq(R_.get(cmd.errors, name_error_path), invalid_char_error_message)
           end
@@ -589,10 +589,10 @@ RSpec.describe 'nested_hash_field', type: :helper do
           expect_eq(
             cmd.errors,
             {
-              errors: [{
+              errors: {
                 message: 'This name is already exists.',
                 error_type: 'general_error'
-              }]
+              }
             }
           )
         end
@@ -615,7 +615,7 @@ RSpec.describe 'nested_hash_field', type: :helper do
           expect_eq(
             cmd.errors,
             {
-              errors: [{
+              errors: {
                 message: 'Fields are not valid',
                 error_type: 'fields_errors',
                 field_errors: {
@@ -623,7 +623,7 @@ RSpec.describe 'nested_hash_field', type: :helper do
                   age: 'You must be older than 18 years old.',
                   email: 'This email is already exists.'
                 }
-              }]
+              }
             }
           )
         end
@@ -647,10 +647,10 @@ RSpec.describe 'nested_hash_field', type: :helper do
           expect_eq(
             cmd.errors,
             {
-              errors: [{
+              errors: {
                 message: 'This email is already exists.',
                 error_type: 'general_error'
-              }]
+              }
             }
           )
         end

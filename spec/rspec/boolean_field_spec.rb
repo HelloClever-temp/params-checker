@@ -12,7 +12,7 @@ RSpec.describe 'boolean_field', type: :helper do
   let(:invalid_boolean_error_message) { "This field's type must be boolean." }
 
   def get_field_error(cmd)
-    R_.get(cmd.errors, 'errors[0].field_errors.active')
+    R_.get(cmd.errors, 'errors.field_errors.active')
   end
 
   describe 'check param_checker arguments' do

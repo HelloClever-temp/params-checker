@@ -12,7 +12,7 @@ RSpec.describe 'hash_field', type: :helper do
   let(:invalid_hash_error_message) { "This field's type must be hash." }
 
   def get_field_error(cmd)
-    R_.get(cmd.errors, 'errors[0].field_errors.person')
+    R_.get(cmd.errors, 'errors.field_errors.person')
   end
 
   describe 'check param_checker arguments' do

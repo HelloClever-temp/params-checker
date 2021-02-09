@@ -166,7 +166,7 @@ module ParamsChecker
       end
 
       def add_nested_hash_error(message = '')
-        errors.add(key, message[:errors][0][:field_errors])
+        errors.add(key, message[:errors][:field_errors])
       end
 
       def add_field_error(message = '')
@@ -208,7 +208,7 @@ module ParamsChecker
         )
         return nil if cmd.success?
 
-        cmd.errors[:errors][0][:field_errors]
+        cmd.errors[:errors][:field_errors]
       end
 
       def formatted_nested_hashs

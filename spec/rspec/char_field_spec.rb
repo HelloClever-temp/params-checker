@@ -15,7 +15,7 @@ RSpec.describe 'char_field', type: :helper do
   let(:char_length_error_message) { 'Invalid char length.' }
 
   def get_field_error(cmd)
-    R_.get(cmd.errors, 'errors[0].field_errors.name')
+    R_.get(cmd.errors, 'errors.field_errors.name')
   end
 
   def get_length_error_message(min_length: 0, max_length: 255)

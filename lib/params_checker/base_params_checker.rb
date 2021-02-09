@@ -2,6 +2,45 @@
 
 DEFAULT_MESSAGE_ERROR = 'Fields are not valid'
 ERROR_TYPES = %w[general_error field_errors]
+
+module SimpleCommand
+  class Errors < Hash
+    def add(key, value, _opts = {})
+      self[key] ||= []
+      self[key] << value
+      self[key].uniq!
+    end
+
+    def set(key, value)
+      self[key] = value
+    end
+
+    def add_multiple_errors(errors_hash)
+      errors_hash.each do |key, values|
+        values.each { |value| add key, value }
+      end
+    end
+
+    def each
+      each_key do |field|
+        self[field].each { |message| yield field, message }
+      end
+    end
+
+    def full_messages
+      map { |attribute, message| full_message(attribute, message) }
+    end
+
+    private
+    def full_message(attribute, message)
+      return message if attribute == :base
+      attr_name = attribute.to_s.tr('.', '_').capitalize
+      "%s %s" % [attr_name, message]
+    end
+
+  end
+end
+
 module ParamsChecker
   class BaseParamsChecker
     include Fields
@@ -45,6 +84,7 @@ module ParamsChecker
     def call
       default_fields_check && custom_check
       error_exist? && add_errors
+      # binding.pry
       formatted_params
     rescue ParamsChecker::GeneralError => e
       # if is the outest hash, add error
@@ -54,7 +94,7 @@ module ParamsChecker
         raise e
       end
 
-      errors.add(
+      errors.set(
         :errors,
         {
           message: e.message,
@@ -243,7 +283,7 @@ module ParamsChecker
         field_errors[key] = value
       end
 
-      errors.add(
+      errors.set(
         :errors,
         {
           message: DEFAULT_MESSAGE_ERROR,

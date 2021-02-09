@@ -13,7 +13,7 @@ RSpec.describe 'arr_field', type: :helper do
   let(:allow_empty_error_message) { 'This field cannot be empty.' }
 
   def get_field_error(cmd)
-    R_.get(cmd.errors, 'errors[0].field_errors.books')
+    R_.get(cmd.errors, 'errors.field_errors.books')
   end
 
   describe 'check param_checker arguments' do

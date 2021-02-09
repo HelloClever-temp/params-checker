@@ -10,7 +10,7 @@ RSpec.describe 'positive_int_field', type: :helper do
   let(:allow_nil_error_message) { "This field's type must be integer." }
 
   def get_field_error(cmd)
-    R_.get(cmd.errors, 'errors[0].field_errors.age')
+    R_.get(cmd.errors, 'errors.field_errors.age')
   end
 
   def get_value_error_message(min: 0, max: 2_000_000_000)

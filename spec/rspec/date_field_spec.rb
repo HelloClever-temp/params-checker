@@ -12,7 +12,7 @@ RSpec.describe 'date_field', type: :helper do
   let(:invalid_date_error_message) { 'Invalid date.' }
 
   def get_field_error(cmd)
-    R_.get(cmd.errors, 'errors[0].field_errors.birth_day')
+    R_.get(cmd.errors, 'errors.field_errors.birth_day')
   end
 
   describe 'check param_checker arguments' do

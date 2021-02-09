@@ -8,11 +8,11 @@ RSpec.describe 'readme_examples', type: :helper do
   include_context 'error_messages'
 
   def get_field_error(cmd)
-    R_.get(cmd.errors, 'errors[0].field_errors')
+    R_.get(cmd.errors, 'errors.field_errors')
   end
 
   def get_general_error(cmd)
-    R_.get(cmd.errors, 'errors[0].message')
+    R_.get(cmd.errors, 'errors.message')
   end
 
   describe 'showcase basic usage' do

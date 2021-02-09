@@ -38,7 +38,7 @@ RSpec.describe 'synthetic_testing', type: :helper do
   let(:invalid_boolean_error_message) { "This field's type must be boolean." }
   let(:invalid_date_error_message) { 'Invalid date.' }
 
-  let(:person_error_path) { 'errors[0].field_errors.person' }
+  let(:person_error_path) { 'errors.field_errors.person' }
 
   def get_valid_value(key)
     # rudash bug when get false boolean values(get true => true, get false => nil)
@@ -60,7 +60,7 @@ RSpec.describe 'synthetic_testing', type: :helper do
 
           expect_fail(cmd)
           expect_eq(
-            R_.get(cmd.errors, 'errors[0].field_errors.person'),
+            R_.get(cmd.errors, 'errors.field_errors.person'),
             {
               example_boolean_field: required_error_message,
               example_date_field: required_error_message,
@@ -100,7 +100,7 @@ RSpec.describe 'synthetic_testing', type: :helper do
 
           expect_fail(cmd)
           expect_eq(
-            R_.get(cmd.errors, 'errors[0].field_errors.person'),
+            R_.get(cmd.errors, 'errors.field_errors.person'),
             {
               example_text_field: required_error_message,
               example_num_field: required_error_message,
@@ -142,7 +142,7 @@ RSpec.describe 'synthetic_testing', type: :helper do
 
         expect_fail(cmd)
         expect_eq(
-          R_.get(cmd.errors, 'errors[0].field_errors.person'),
+          R_.get(cmd.errors, 'errors.field_errors.person'),
           {
             example_boolean_field: required_error_message,
             example_date_field: required_error_message,
@@ -177,7 +177,7 @@ RSpec.describe 'synthetic_testing', type: :helper do
 
           expect_fail(cmd)
           expect_eq(
-            R_.get(cmd.errors, 'errors[0].field_errors.person'),
+            R_.get(cmd.errors, 'errors.field_errors.person'),
             {
               example_char_field: allow_blank_error_message
             }
@@ -196,7 +196,7 @@ RSpec.describe 'synthetic_testing', type: :helper do
 
           expect_fail(cmd)
           expect_eq(
-            R_.get(cmd.errors, 'errors[0].field_errors.person'),
+            R_.get(cmd.errors, 'errors.field_errors.person'),
             {
               example_text_field: allow_blank_error_message
             }
@@ -216,7 +216,7 @@ RSpec.describe 'synthetic_testing', type: :helper do
 
           expect_fail(cmd)
           expect_eq(
-            R_.get(cmd.errors, 'errors[0].field_errors.person'),
+            R_.get(cmd.errors, 'errors.field_errors.person'),
             {
               example_char_field: allow_blank_error_message,
               example_text_field: allow_blank_error_message
@@ -265,7 +265,7 @@ RSpec.describe 'synthetic_testing', type: :helper do
 
           expect_fail(cmd)
           expect_eq(
-            R_.get(cmd.errors, 'errors[0].field_errors.person'),
+            R_.get(cmd.errors, 'errors.field_errors.person'),
             {
               example_arr_field: 'This field cannot be empty.'
             }
@@ -366,7 +366,7 @@ RSpec.describe 'synthetic_testing', type: :helper do
 
           expect_fail(cmd)
           expect_eq(
-            R_.get(cmd.errors, 'errors[0].field_errors.person'),
+            R_.get(cmd.errors, 'errors.field_errors.person'),
             {
               example_char_field: "This string field's length must be in range from 0 to 255."
             }
@@ -385,7 +385,7 @@ RSpec.describe 'synthetic_testing', type: :helper do
 
           expect_fail(cmd)
           expect_eq(
-            R_.get(cmd.errors, 'errors[0].field_errors.person'),
+            R_.get(cmd.errors, 'errors.field_errors.person'),
             {
               example_text_field: "This string field's length must be in range from 0 to 30000."
             }
@@ -405,7 +405,7 @@ RSpec.describe 'synthetic_testing', type: :helper do
 
           expect_fail(cmd)
           expect_eq(
-            R_.get(cmd.errors, 'errors[0].field_errors.person'),
+            R_.get(cmd.errors, 'errors.field_errors.person'),
             {
               example_char_field: "This string field's length must be in range from 0 to 255.",
               example_text_field: "This string field's length must be in range from 0 to 30000."
@@ -438,7 +438,7 @@ RSpec.describe 'synthetic_testing', type: :helper do
           expect_fail(cmd)
 
           expect_eq(
-            R_.get(cmd.errors, 'errors[0].field_errors.person'),
+            R_.get(cmd.errors, 'errors.field_errors.person'),
             {
               example_date_field: 'Invalid date.',
               example_bigint_field: "This field's type must be integer.",
@@ -474,7 +474,7 @@ RSpec.describe 'synthetic_testing', type: :helper do
           expect_fail(cmd)
 
           expect_eq(
-            R_.get(cmd.errors, 'errors[0].field_errors.person'),
+            R_.get(cmd.errors, 'errors.field_errors.person'),
             {
               example_num_field: "This numeric field's value must be in range from -2000000000 to 2000000000.",
               example_bignum_field: "This field's type must be numeric.",
@@ -513,7 +513,7 @@ RSpec.describe 'synthetic_testing', type: :helper do
           expect_fail(cmd)
 
           expect_eq(
-            R_.get(cmd.errors, 'errors[0].field_errors.person'),
+            R_.get(cmd.errors, 'errors.field_errors.person'),
             {
               example_boolean_field: "This field's type must be boolean.",
               example_date_field: 'Invalid date.',

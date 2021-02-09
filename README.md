@@ -42,13 +42,13 @@
 
     cmd.errors
     => {
-      errors: [{
+      errors: {
         message: 'Fields are not valid',
         error_type: 'fields_errors',
         field_errors: {
           email: 'This field is required.',
         }
-      }]
+      }
     }
     ```
 ## Installation
@@ -156,14 +156,14 @@ end
 
     cmd.errors
     => {
-      errors: [{
+      errors: {
         message: 'Fields are not valid',
         error_type: 'fields_errors',
         field_errors: {
           name: 'This field is required.',
           email: 'This field is required.'
         }
-      }]
+      }
     }
     ```
   - For more examples, read [here](#1-basic-usage).
@@ -190,23 +190,23 @@ end
     - example:
     ```ruby
       {
-        errors: [{
+        errors: {
           message: 'Fields are not valid',
           error_type: 'fields_errors',
           field_errors: {
             name: 'This field is required.'
           }
-        }]
+        }
       }
     ```
   - general_error
     - example:
     ```ruby
       {
-        errors: [{
+        errors: {
           message: "Email or password invalid",
           error_type: "general_error"
-        }]
+        }
       }
     ```
 - A ParamsChecker validator will return field_errors when:
@@ -254,13 +254,13 @@ end
       # the all params pass the type checking step(check
       # if name is string, check if name's length is valid,...)
       => {
-        errors: [{
+        errors: {
           message: 'Fields are not valid',
           error_type: 'fields_errors',
           field_errors: {
             name: 'This field is required.'
           }
-        }]
+        }
       }
 
       # invalid params(Name already exists)
@@ -273,13 +273,13 @@ end
 
       cmd.errors
       => {
-        errors: [{
+        errors: {
           message: 'Fields are not valid',
           error_type: 'fields_errors',
           field_errors: {
             name: 'Name already exists.'
           }
-        }]
+        }
       }
 
       # valid params
@@ -336,13 +336,13 @@ end
 
       cmd.errors
       => {
-        errors: [{
+        errors: {
           message: 'Fields are not valid',
           error_type: 'fields_errors',
           field_errors: {
             name: 'Your name can not be Ted Nguyen and your age can not be 5.'
           }
-        }]
+        }
       }
       ```
   - You can validate multiple fields at once, removing old fields, or adding new fields by using #check
@@ -415,10 +415,10 @@ end
 
         cmd.errors
         => {
-          errors: [{
+          errors: {
             message: "Email or password invalid",
             error_type: "general_error"
-          }]
+          }
         }
       ```
 
@@ -460,7 +460,7 @@ end
     => true
     cmd.errors
     => {
-      errors: [{
+      errors: {
         message: 'Fields are not valid',
         error_type: 'fields_errors',
         field_errors: {
@@ -468,7 +468,7 @@ end
             age: "This field is required."
           }
         }
-      }]
+      }
     }
 
     cmd = Kid.call(
@@ -532,7 +532,7 @@ end
     => true
     cmd.errors
     => {
-      errors: [{
+      errors: {
         message: 'Fields are not valid',
         error_type: 'fields_errors',
         field_errors: {
@@ -544,7 +544,7 @@ end
             nil
           ]
         }
-      }]
+      }
     }
     ```
 
@@ -576,7 +576,7 @@ cmd.result
 => {}
 cmd.errors
 => {
-  errors: [{
+  errors: {
     message: 'Fields are not valid',
     error_type: 'fields_errors',
     field_errors: {
@@ -584,7 +584,7 @@ cmd.errors
       age: 'This field is required.',
       email: 'This field is required.'
     }
-  }]
+  }
 }
 
 # validate number 2
@@ -605,14 +605,14 @@ cmd.result
 => {}
 cmd.errors
 => {
-  errors: [{
+  errors: {
     message: 'Fields are not valid',
     error_type: 'fields_errors',
     field_errors: {
       name: "This field's type must be string.",
       age: 'This field is required.'
     }
-  }]
+  }
 }
 
 # validate number 3
@@ -634,14 +634,14 @@ cmd.result
 => {}
 cmd.errors
 => {
-  errors: [{
+  errors: {
     message: 'Fields are not valid',
     error_type: 'fields_errors',
     field_errors: {
       age: "This integer field's value must be in range from -2000000000 to 2000000000.",
       email: "This string field's length must be in range from 0 to 255."
     }
-  }]
+  }
 }
 
 
@@ -706,7 +706,7 @@ cmd.result
 => {}
 cmd.errors
 => {
-  errors: [{
+  errors: {
     message: 'Fields are not valid',
     error_type: 'fields_errors',
     field_errors: {
@@ -714,7 +714,7 @@ cmd.errors
       age: "This integer field's value must be in range from -2000000000 to 130.",
       email: 'This field cannot be blank.'
     }
-  }]
+  }
 }
 
 # validate number 6
@@ -854,14 +854,14 @@ cmd.result
 => {}
 cmd.errors
 => {
-  errors: [{
+  errors: {
     message: 'Fields are not valid',
     error_type: 'fields_errors',
     field_errors: {
       name: 'This name is already exists.',
       age: 'You must be older than 18 years old.'
     }
-  }]
+  }
 }
 
 # validate number 10
