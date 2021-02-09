@@ -46,7 +46,7 @@
         message: 'Fields are not valid',
         error_type: 'fields_errors',
         field_errors: {
-          name: 'This field is required.',
+          email: 'This field is required.',
         }
       }]
     }
