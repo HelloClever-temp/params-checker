@@ -20,8 +20,7 @@
 - [License](#license)
 ## Introduction
 - When your Rails application is still small, rails's model validation indeed is very convenient. Adding new validations is easy, rails always validate for you,...But once your app grows up, Rails's model validation will become messy. You have to validate differently in different use cases, your model grows big(because it contains too many validations),... That's when Params Checker comes in.
-- Params Checker's only purpose is to help you validate the data. That's it.
-- This library is inspired by Django REST framework's validation module.
+- ParamsChecker's main purpose is to help you validating data, seperating your validation code from your model.ParamsChecker is partly inspired by Django REST framework's validation module.
 - It's very easy and fast to use Params Checker. These is no learning curve.
   - Example:
     ```ruby
