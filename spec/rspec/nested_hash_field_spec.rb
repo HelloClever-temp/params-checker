@@ -490,11 +490,34 @@ RSpec.describe 'nested_hash_field', type: :helper do
         end
 
         context 'field is many' do
-          it 'should PASS' do
-            params = { person: [valid_value, valid_value] }
-            cmd = validator.call(params: params)
+          context 'params are valid' do
+            it 'should PASS' do
+              params = { person: [valid_value, valid_value] }
+              cmd = validator.call(params: params)
 
-            expect_success(cmd)
+              expect_success(cmd)
+            end
+          end
+
+          context 'params are invalid' do
+            it 'should PASS' do
+              params = { person: [valid_value, valid_value.except(:name), valid_value.except(:age)] }
+              cmd = validator.call(params: params)
+
+              expect_fail(cmd)
+              expect_eq(
+                get_field_error(cmd),
+                [
+                  nil,
+                  {
+                    name: 'This field is required.'
+                  },
+                  {
+                    age: 'This field is required.'
+                  }
+                ]
+              )
+            end
           end
         end
       end

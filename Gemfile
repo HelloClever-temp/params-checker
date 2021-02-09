@@ -16,8 +16,9 @@ gemspec
 group :development, :test do
   # gem 'rspec'
   gem 'rspec-rails'
-  gem 'simple_command'
   gem 'pry'
   gem 'zeus'
   gem 'rudash'
 end
+
+gem 'simple_command', '~> 0.1.0'

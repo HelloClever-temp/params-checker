@@ -188,34 +188,48 @@ module ParamsChecker
       def call
         return nil if schema[key][:allow_nil] && params[key].nil?
 
-        check_type && formatted_nested_hashs
+        check_type && add_errors && formatted_nested_hashs
       end
 
-      def formatted_nested_hashs
-        params[key].map.with_index do |nested_hash, index|
-          formatted_nested_hash(nested_hash, index)
+      def add_errors
+        all_errors = params[key].map do |nested_hash|
+          get_error(nested_hash)
         end
+        return if all_errors.all?(&:nil?)
+
+        errors.add(key, all_errors)
       end
 
-      def formatted_nested_hash(nested_hash, index)
+      def get_error(nested_hash)
         cmd = schema[key][:class].call(
           params: nested_hash,
           context: context,
           is_outest_hash: false
         )
-        return cmd.result if cmd.success?
+        return nil if cmd.success?
 
-        add_nested_hash_error(cmd.errors, index)
+        cmd.errors[:errors][0][:field_errors]
+      end
+
+      def formatted_nested_hashs
+        params[key].map do |nested_hash|
+          formatted_nested_hash(nested_hash)
+        end
+      end
+
+      def formatted_nested_hash(nested_hash)
+        cmd = schema[key][:class].call(
+          params: nested_hash,
+          context: context,
+          is_outest_hash: false
+        )
+        cmd.result
       end
 
       def check_type
         valid = params[key].is_a?(Array)
         add_field_error("This field's type must be array.") unless valid
         valid
-      end
-
-      def add_nested_hash_error(message = '', index)
-        errors.add(key, message[:errors][0][:field_errors].merge(index: index))
       end
 
       def add_field_error(message = '')
