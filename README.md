@@ -486,7 +486,7 @@ end
     => false
     ```
 
-- You can also pass the argument "many", to treat the it as an array of multiple ParamsCheckers:
+- You can also pass the argument "many", to treat it as an array of multiple ParamsCheckers:
   - example:
     ```ruby
     class Book < ParamsChecker::BaseParamsChecker
