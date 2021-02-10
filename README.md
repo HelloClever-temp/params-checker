@@ -60,12 +60,7 @@ gem 'params_checker'
 
 And then execute:
 ```bash
-$ bundle
-```
-
-Or install it yourself as:
-```bash
-$ gem 'params_checker', git: 'git@gitlab.com:rexylab/params-checker.git', branch: 'master'
+$ bundle install
 ```
 ## Quickstart
 - You can just use a simple params checker like this:
