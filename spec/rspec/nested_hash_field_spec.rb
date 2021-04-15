@@ -494,8 +494,13 @@ RSpec.describe 'nested_hash_field', type: :helper do
             it 'should PASS' do
               params = { person: [valid_value, valid_value] }
               cmd = validator.call(params: params)
+              pp "========>cmd.result : ", cmd.result
 
               expect_success(cmd)
+              expect_eq(
+                cmd.result,
+                params
+              )
             end
           end
 

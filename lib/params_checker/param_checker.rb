@@ -195,7 +195,7 @@ module ParamsChecker
         all_errors = params[key].map do |nested_hash|
           get_error(nested_hash)
         end
-        return if all_errors.all?(&:nil?)
+        return true if all_errors.all?(&:nil?)
 
         errors.add(key, all_errors)
       end
